@@ -19,9 +19,9 @@ namespace GitHubFlowVersion
         {
             SemanticVersion fileVersion = _nextVersionTxtFileFinder.GetNextVersion();
             SemanticVersion lastRelease = _lastTaggedReleaseFinder.GetVersion();
-            if (fileVersion == lastRelease)
+            if (fileVersion <= lastRelease)
             {
-                return new SemanticVersion(fileVersion.Major, fileVersion.Minor, fileVersion.Patch + 1);
+                return new SemanticVersion(lastRelease.Major, lastRelease.Minor, lastRelease.Patch + 1);
             }
 
             throw new NotImplementedException();

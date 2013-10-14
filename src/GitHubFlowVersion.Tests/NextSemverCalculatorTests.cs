@@ -27,5 +27,18 @@ namespace GitHubFlowVersion.Tests
 
             Assert.Equal(new SemanticVersion(0, 1, 1), nextVersion);
         }
+
+        [Fact]
+        public void LesserVersionShouldBumpPatchVersionOfCurrentRelease()
+        {
+            var currentVersion = new SemanticVersion(0, 1, 0);
+            var fileVersion = new SemanticVersion(0, 0, 1);
+            _lastTaggedReleaseFinder.GetVersion().Returns(currentVersion);
+            _txtFileVersion.GetNextVersion().Returns(fileVersion);
+
+            var nextVersion = _sut.NextVersion();
+
+            Assert.Equal(new SemanticVersion(0, 1, 1), nextVersion);
+        }
     }
 }
