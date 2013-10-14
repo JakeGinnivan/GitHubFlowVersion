@@ -45,6 +45,7 @@
     <Compile Include="GitDirFinder.cs" />
     <Compile Include="ILastTaggedReleaseFinder.cs" />
     <Compile Include="INextVersionTxtFileFinder.cs" />
+    <Compile Include="LastTaggedReleaseFinder.cs" />
     <Compile Include="NextSemverCalcualtor.cs" />
     <Compile Include="NextVersionTxtFileFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

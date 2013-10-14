@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GitHubFlowVersion
+﻿namespace GitHubFlowVersion
 {
     public class NextSemverCalcualtor
     {
@@ -24,7 +22,7 @@ namespace GitHubFlowVersion
                 return new SemanticVersion(lastRelease.Major, lastRelease.Minor, lastRelease.Patch + 1);
             }
 
-            throw new NotImplementedException();
+            return fileVersion;
         }
     }
 }
