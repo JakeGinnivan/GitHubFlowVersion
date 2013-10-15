@@ -4,12 +4,13 @@ namespace GitHubFlowVersion
 {
     public class SemanticVersion
     {
-        public SemanticVersion(int major, int minor, int patch, string suffix = null)
+        public SemanticVersion(int major, int minor, int patch, string suffix = null, string buildMetaData = null)
         {
             Major = major;
             Minor = minor;
             Patch = patch;
             Suffix = suffix;
+            BuildMetaData = buildMetaData;
         }
 
         protected bool Equals(SemanticVersion other)
@@ -116,10 +117,25 @@ namespace GitHubFlowVersion
         public int Minor { get; private set; }
         public int Patch { get; private set; }
         public string Suffix { get; private set; }
+        public string BuildMetaData { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}.{2}{3}", Major, Minor, Patch, string.IsNullOrEmpty(Suffix) ? null : "-" + Suffix);
+            return string.Format(
+                "{0}.{1}.{2}{3}{4}", 
+                Major, Minor, Patch, 
+                string.IsNullOrEmpty(Suffix) ? null : "-" + Suffix,
+                string.IsNullOrEmpty(BuildMetaData) ? null : "+" + BuildMetaData);
+        }
+
+        public SemanticVersion WithBuildMetaData(string buildMetaData)
+        {
+            return new SemanticVersion(Major, Minor, Patch, Suffix, buildMetaData);
+        }
+
+        public SemanticVersion WithSuffix(string suffix)
+        {
+            return new SemanticVersion(Major, Minor, Patch, suffix, BuildMetaData);
         }
     }
 }

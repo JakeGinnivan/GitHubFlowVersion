@@ -38,5 +38,17 @@ namespace GitHubFlowVersion.Tests
 
             Trace.WriteLine(nextVersion);
         }
+
+        [Fact]
+        public void NextBuildNumber()
+        {
+            var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(_gitRepo);
+            var calc = new BuildNumberCalculator(new NextSemverCalcualtor(new NextVersionTxtFileFinder(), lastTaggedReleaseFinder), lastTaggedReleaseFinder,
+                new GitHelper(), _gitRepo);
+
+            var nextVersion = calc.GetBuildNumber();
+
+            Trace.WriteLine(nextVersion);
+        }
     }
 }

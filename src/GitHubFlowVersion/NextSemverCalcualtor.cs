@@ -1,6 +1,6 @@
 ﻿namespace GitHubFlowVersion
 {
-    public class NextSemverCalcualtor
+    public class NextSemverCalcualtor : INextSemverCalcualtor
     {
         private readonly INextVersionTxtFileFinder _nextVersionTxtFileFinder;
         private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
@@ -16,7 +16,7 @@
         public SemanticVersion NextVersion()
         {
             SemanticVersion fileVersion = _nextVersionTxtFileFinder.GetNextVersion();
-            SemanticVersion lastRelease = _lastTaggedReleaseFinder.GetVersion();
+            SemanticVersion lastRelease = _lastTaggedReleaseFinder.GetVersion().SemVer;
             if (fileVersion <= lastRelease)
             {
                 return new SemanticVersion(lastRelease.Major, lastRelease.Minor, lastRelease.Patch + 1);

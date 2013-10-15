@@ -42,8 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildNumberCalculator.cs" />
     <Compile Include="GitDirFinder.cs" />
+    <Compile Include="GitHelper.cs" />
+    <Compile Include="IGitHelper.cs" />
     <Compile Include="ILastTaggedReleaseFinder.cs" />
+    <Compile Include="INextSemverCalcualtor.cs" />
     <Compile Include="INextVersionTxtFileFinder.cs" />
     <Compile Include="LastTaggedReleaseFinder.cs" />
     <Compile Include="NextSemverCalcualtor.cs" />
@@ -51,6 +55,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SemanticVersionParser.cs" />
+    <Compile Include="TeamCity.cs" />
+    <Compile Include="VersionTaggedCommit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

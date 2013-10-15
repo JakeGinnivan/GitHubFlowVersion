@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using LibGit2Sharp;
+using NSubstitute;
 using Xunit;
 
 namespace GitHubFlowVersion.Tests
@@ -20,7 +21,8 @@ namespace GitHubFlowVersion.Tests
         public void SameVersionShouldBumpPatchVersion()
         {
             var currentVersion = new SemanticVersion(0, 1, 0);
-            _lastTaggedReleaseFinder.GetVersion().Returns(currentVersion);
+            var commit = Substitute.For<Commit>();
+            _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(commit, currentVersion));
             _txtFileVersion.GetNextVersion().Returns(currentVersion);
 
             var nextVersion = _sut.NextVersion();
@@ -33,7 +35,8 @@ namespace GitHubFlowVersion.Tests
         {
             var currentVersion = new SemanticVersion(0, 1, 0);
             var fileVersion = new SemanticVersion(0, 0, 1);
-            _lastTaggedReleaseFinder.GetVersion().Returns(currentVersion);
+            var commit = Substitute.For<Commit>();
+            _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(commit, currentVersion));
             _txtFileVersion.GetNextVersion().Returns(fileVersion);
 
             var nextVersion = _sut.NextVersion();
@@ -46,7 +49,8 @@ namespace GitHubFlowVersion.Tests
         {
             var currentVersion = new SemanticVersion(0, 1, 0);
             var fileVersion = new SemanticVersion(1, 0, 0);
-            _lastTaggedReleaseFinder.GetVersion().Returns(currentVersion);
+            var commit = Substitute.For<Commit>();
+            _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(commit, currentVersion));
             _txtFileVersion.GetNextVersion().Returns(fileVersion);
 
             var nextVersion = _sut.NextVersion();

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 using Xunit.Extensions;
 
 namespace GitHubFlowVersion.Tests
@@ -8,35 +6,28 @@ namespace GitHubFlowVersion.Tests
     public class SemanticVersionTests
     {
         [Theory]
-        [ClassData(typeof(SemanticVersionCompareTests))]
+        [ClassData(typeof(SemanticVersionCompareTestsData))]
         public void Compare(SemanticVersion first, SemanticVersion second, bool firstIsHigher)
         {
             Assert.True(firstIsHigher == first > second, string.Format("{0} > {1} != {2}", first, second, firstIsHigher));
-        } 
-    }
-
-    public class SemanticVersionCompareTests : IEnumerable<object[]>
-    {
-        public IEnumerator<object[]> GetEnumerator()
-        {
-            yield return new object[] { SemVer(0, 0, 1), new SemanticVersion(0, 0, 0), true };
-            yield return new object[] { SemVer(0, 0, 1), new SemanticVersion(0, 0, 1), false };
-            yield return new object[] { SemVer(0, 1, 0), new SemanticVersion(0, 1, 0), false };
-            yield return new object[] { SemVer(0, 1, 0), new SemanticVersion(0, 2, 0), false };
-            yield return new object[] { SemVer(0, 2, 0), new SemanticVersion(0, 1, 0), true };
-            yield return new object[] { SemVer(1, 0, 0), new SemanticVersion(0, 0, 0), true };
-            yield return new object[] { SemVer(0, 0, 0), new SemanticVersion(1, 0, 0), false };
-            yield return new object[] { SemVer(1, 0, 0), new SemanticVersion(1, 0, 0), false };
         }
 
-        private static SemanticVersion SemVer(int major, int minor, int patch)
+        [Fact]
+        public void BuildMetaDataIsIgnoredInEquality()
         {
-            return new SemanticVersion(major, minor, patch);
+            var first = new SemanticVersion(0, 1, 1, buildMetaData: "003");
+            var second = new SemanticVersion(0, 1, 1, buildMetaData: "002");
+
+            Assert.Equal(first, second);
+            Assert.True(first == second);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        [Fact]
+        public void ToStringAppendsBuildMetaData()
         {
-            return GetEnumerator();
+            var semver = new SemanticVersion(0, 1, 1, buildMetaData: "003");
+
+            Assert.Equal("0.1.1+003", semver.ToString());
         }
     }
 }

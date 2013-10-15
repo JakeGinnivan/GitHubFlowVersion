@@ -51,9 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildNumberCalculatorTests.cs" />
     <Compile Include="NextSemverCalculatorTests.cs" />
     <Compile Include="Integration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemanticVersionCompareTestsData.cs" />
     <Compile Include="SemanticVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>

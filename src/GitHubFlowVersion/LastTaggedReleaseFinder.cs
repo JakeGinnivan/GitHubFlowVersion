@@ -6,41 +6,38 @@ namespace GitHubFlowVersion
 {
     public class LastTaggedReleaseFinder : ILastTaggedReleaseFinder
     {
-        private readonly IRepository _gitRepo;
+        private readonly Lazy<VersionTaggedCommit> _lastTaggedRelease;
 
         public LastTaggedReleaseFinder(IRepository gitRepo)
         {
-            _gitRepo = gitRepo;
+            _lastTaggedRelease = new Lazy<VersionTaggedCommit>(()=>GetVersion(gitRepo));
         }
 
-        public SemanticVersion GetVersion()
+        public VersionTaggedCommit GetVersion()
         {
-            var tags = _gitRepo.Tags.Select(t =>
+            return _lastTaggedRelease.Value;
+        }
+
+        private VersionTaggedCommit GetVersion(IRepository gitRepo)
+        {
+            var tags = gitRepo.Tags.Select(t =>
             {
                 SemanticVersion version;
                 if (SemanticVersionParser.TryParse(t.Name, out version))
                 {
-                    return new
-                    {
-                        Commit = t.Target,
-                        SemVer = version
-                    };
+                    return new VersionTaggedCommit((Commit) t.Target, version);
                 }
                 return null;
             })
-                .Where(a=>a!= null)
+                .Where(a => a != null)
                 .ToArray();
-            var branch = _gitRepo.Head;
-            DateTimeOffset olderThan = branch.Tip.Committer.When;
-            var lastTaggedCommit = branch.Commits.FirstOrDefault(c => c.Committer.When < olderThan && tags.Any(a => a.Commit == c));
-
-            //var commitsSinceLastRelease = currentBranch.Commits
-            //                                  .SkipWhile(x => x != lastTaggedCommit)
-            //                                  .TakeWhile(x => x.Committer.When >= olderThan)
-            //                                  .Count();
+            var branch = gitRepo.Head;
+            var olderThan = branch.Tip.Committer.When;
+            var lastTaggedCommit =
+                branch.Commits.FirstOrDefault(c => c.Committer.When < olderThan && tags.Any(a => a.Commit == c));
 
             if (lastTaggedCommit != null)
-                return tags.Single(a => a.Commit.Sha == lastTaggedCommit.Sha).SemVer;
+                return tags.Single(a => a.Commit.Sha == lastTaggedCommit.Sha);
 
             throw new Exception("Cant find last tagged version");
         }

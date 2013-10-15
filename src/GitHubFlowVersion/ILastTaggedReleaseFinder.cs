@@ -2,6 +2,6 @@
 {
     public interface ILastTaggedReleaseFinder
     {
-        SemanticVersion GetVersion();
+        VersionTaggedCommit GetVersion();
     }
 }
