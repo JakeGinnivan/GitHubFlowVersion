@@ -8,9 +8,9 @@ namespace GitHubFlowVersion
     {
         private readonly Lazy<VersionTaggedCommit> _lastTaggedRelease;
 
-        public LastTaggedReleaseFinder(IRepository gitRepo)
+        public LastTaggedReleaseFinder(IRepository gitRepo, IGitHelper gitHelper)
         {
-            _lastTaggedRelease = new Lazy<VersionTaggedCommit>(()=>GetVersion(gitRepo));
+            _lastTaggedRelease = new Lazy<VersionTaggedCommit>(()=>GetVersion(gitRepo, gitHelper));
         }
 
         public VersionTaggedCommit GetVersion()
@@ -18,7 +18,7 @@ namespace GitHubFlowVersion
             return _lastTaggedRelease.Value;
         }
 
-        private VersionTaggedCommit GetVersion(IRepository gitRepo)
+        private VersionTaggedCommit GetVersion(IRepository gitRepo, IGitHelper gitHelper)
         {
             var tags = gitRepo.Tags.Select(t =>
             {
@@ -31,7 +31,7 @@ namespace GitHubFlowVersion
             })
                 .Where(a => a != null)
                 .ToArray();
-            var branch = gitRepo.Branches["master"];
+            var branch = gitHelper.GetBranch(gitRepo, "master");
             var olderThan = branch.Tip.Committer.When;
             var lastTaggedCommit =
                 branch.Commits.FirstOrDefault(c => c.Committer.When < olderThan && tags.Any(a => a.Commit == c));
