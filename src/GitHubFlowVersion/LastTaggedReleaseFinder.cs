@@ -31,7 +31,7 @@ namespace GitHubFlowVersion
             })
                 .Where(a => a != null)
                 .ToArray();
-            var branch = gitRepo.Head;
+            var branch = gitRepo.Branches["master"];
             var olderThan = branch.Tip.Committer.When;
             var lastTaggedCommit =
                 branch.Commits.FirstOrDefault(c => c.Committer.When < olderThan && tags.Any(a => a.Commit == c));
