@@ -33,9 +33,6 @@
     <StartupObject>GitHubFlowVersion.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Args">
-      <HintPath>..\packages\Args.1.1.1\lib\Net40\Args.dll</HintPath>
-    </Reference>
     <Reference Include="LibGit2Sharp">
       <HintPath>..\packages\LibGit2Sharp.0.14.1.0\lib\net35\LibGit2Sharp.dll</HintPath>
     </Reference>

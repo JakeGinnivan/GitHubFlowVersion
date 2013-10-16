@@ -8,9 +8,6 @@ namespace GitHubFlowVersion
     {
         public static void Main(string[] args)
         {
-            var commandLineArgs = Args.Configuration.Configure<CommandLineArgs>()
-                .CreateAndBind(args);
-
             string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var gitRepo = new Repository(GitDirFinder.TreeWalkForGitDir(currentDirectory));
             var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo);
@@ -20,10 +17,5 @@ namespace GitHubFlowVersion
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
             TeamCityVersionWriter.WriteBuildNumber(nextBuildNumber);
         } 
-    }
-
-    public class CommandLineArgs
-    {
-        
     }
 }
