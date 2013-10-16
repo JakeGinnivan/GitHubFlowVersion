@@ -16,6 +16,7 @@ namespace GitHubFlowVersion
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
             TeamCityVersionWriter.WriteBuildNumber(nextBuildNumber);
+            TeamCityVersionWriter.WriteAssemblyFileVersion(nextBuildNumber);
         } 
     }
 }
