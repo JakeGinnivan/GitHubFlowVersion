@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3C3971FC-12B4-4CD8-B6FD-D7051BED6B46}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GitHubFlowVersion</RootNamespace>
     <AssemblyName>GitHubFlowVersion</AssemblyName>
@@ -29,7 +29,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GitHubFlowVersion.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Args">
+      <HintPath>..\packages\Args.1.1.1\lib\Net40\Args.dll</HintPath>
+    </Reference>
     <Reference Include="LibGit2Sharp">
       <HintPath>..\packages\LibGit2Sharp.0.14.1.0\lib\net35\LibGit2Sharp.dll</HintPath>
     </Reference>
@@ -43,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildNumberCalculator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="TeamCityVersionWriter.cs" />
     <Compile Include="GitDirFinder.cs" />
     <Compile Include="GitHelper.cs" />
     <Compile Include="IGitHelper.cs" />
