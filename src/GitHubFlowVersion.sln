@@ -9,9 +9,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubFlowVersion.Tests", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{827CC70E-BBB5-465C-83D5-7DE98E999E4E}"
 	ProjectSection(SolutionItems) = preProject
+		..\Build.cmd = ..\Build.cmd
+		..\GitHubFlowVersion.proj = ..\GitHubFlowVersion.proj
 		..\LICENSE = ..\LICENSE
 		..\NextVersion.txt = ..\NextVersion.txt
 		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{655847F5-BFB4-4C67-9142-84D3DCD43065}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Global
