@@ -52,6 +52,8 @@ GitHubFlow version at the moment is designed to work with TeamCity and be as sim
 2. Call your build scripts/whatever and use %build.number% which will be the SemVer  
 %GitHubFlowVersion.FileVersion% will also be available to use (if you are patching assembly info)
 
+For the moment you need to promote the %teamcity.build.vcs.branch.{configurationid}% build parameter to an environment variable with the same name for pull requests to be handled correctly
+
 ### How do I patch assembly info?
 I would suggest using [https://github.com/loresoft/msbuildtasks](https://github.com/loresoft/msbuildtasks) in your MSBuild script, a sample is available at [https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj](https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj)
 
