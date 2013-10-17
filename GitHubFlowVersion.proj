@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Publish" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Root>$(MSBuildProjectDirectory)\</Root>
+    <BuildPlatform Condition="$(BuildPlatform) == ''">Any CPU</BuildPlatform>
+    <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+    <MSBuildCommunityTasksPath>$(Root)tools\MSBuildCommunityTasks\</MSBuildCommunityTasksPath>
+    <DropPath>$(Root)build\Artifacts\</DropPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets"/>
+
+  <Target Name="Cleanup">
+    <Error Condition="$(Root) == ''" Text="Root variable must be defined" />
+
+    <!-- Diagnostics -->
+    <Message Text="Diagnostics:"/>
+    <Message Text="Project root:    $(Root)" />
+    <Message Text="Drop path:       $(DropPath)" />
+
+    <!-- Clean up -->
+    <ItemGroup>
+      <FilesToDelete Include="$(Root)**\bin\**\*.*" />
+      <FilesToDelete Include="$(Root)**\obj\**\*.*" />
+      <FilesToDelete Include="$(DropPath)**\*.*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" ContinueOnError="true" />
+    <RemoveDir Directories="$(DropPath)" />
+  </Target>
+
+  <Target Name="Version" DependsOnTargets="Cleanup">
+    <AssemblyInfo CodeLanguage="CS"
+                  OutputFile="$(Root)src\GitHubFlowVersion\Properties\AssemblyInfo.cs"
+                  AssemblyVersion="$(Build_Number)"
+                  AssemblyFileVersion="$(GitHubFlowVersion_FileVersion)"
+                  Condition="$(Build_Number)!='' AND $(GitHubFlowVersion_FileVersion)!=''"/>
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="Version">
+    <MSBuild Projects="$(Root)src\GitHubFlowVersion.sln" Properties="Configuration=$(Configuration);Platform=$(BuildPlatform)" />
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="Build">
+    <ItemGroup>
+      <xUnit Include="$(Root)src\packages\xunit.runners.*\tools\xunit.console.clr4.exe" />
+    </ItemGroup>
+    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll" />
+  </Target>
+
+  <Target Name="Publish" DependsOnTargets="Build">
+    <ItemGroup>
+      <BuildOutput Include="$(Root)src\GitHubFlowVersion\bin\$(Configuration)\**\*.*"/>
+    </ItemGroup>
+
+    <Copy SourceFiles="@(BuildOutput)"
+    			DestinationFiles="@(BuildOutput->'$(DropPath)Files\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>
