@@ -32,12 +32,14 @@ namespace GitHubFlowVersion
         {
             foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
             {
-                if (((string)de.Key).StartsWith("teamcity.build.vcs.branch."))
+                if (((string)de.Key).StartsWith("teamcity.build.vcs.branch.", StringComparison.InvariantCultureIgnoreCase))
                 {
+                    Trace.WriteLine(string.Format("Found Teamcity Branch: {0}", de.Value));
                     return (string)de.Value;
                 }
             }
 
+            Trace.WriteLine("Could not find branch information from TeamCity");
             return null;
         }
 
