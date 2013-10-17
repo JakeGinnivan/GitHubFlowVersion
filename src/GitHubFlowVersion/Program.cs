@@ -9,6 +9,7 @@ namespace GitHubFlowVersion
     {
         public static int  Main(string[] args)
         {
+            Trace.Listeners.Add(new ConsoleTraceListener());
             string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string gitDirectory = GitDirFinder.TreeWalkForGitDir(currentDirectory);
             if (string.IsNullOrEmpty(gitDirectory))
