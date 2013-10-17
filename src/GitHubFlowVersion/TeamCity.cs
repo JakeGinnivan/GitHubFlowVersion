@@ -19,7 +19,7 @@ namespace GitHubFlowVersion
         public static bool IsBuildingAPullRequest()
         {
             var branchInfo = GetBranchEnvironmentVariable();
-            var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.Contains("/Pull/");
+            var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.ToLower().Contains("/pull/");
             if (isBuildingAPullRequest)
             {
                 Trace.Write("This is a pull request build for pull: " + CurrentPullRequestNo());
@@ -32,12 +32,14 @@ namespace GitHubFlowVersion
         {
             foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
             {
-                if (((string)de.Key).StartsWith("teamcity.build.vcs.branch."))
+                if (((string)de.Key).StartsWith("teamcity.build.vcs.branch.", StringComparison.InvariantCultureIgnoreCase))
                 {
+                    Trace.WriteLine(string.Format("Found Teamcity Branch: {0}", de.Value));
                     return (string)de.Value;
                 }
             }
 
+            Trace.WriteLine("Could not find branch information from TeamCity");
             return null;
         }
 
