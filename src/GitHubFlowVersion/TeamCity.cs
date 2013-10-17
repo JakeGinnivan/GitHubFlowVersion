@@ -19,7 +19,7 @@ namespace GitHubFlowVersion
         public static bool IsBuildingAPullRequest()
         {
             var branchInfo = GetBranchEnvironmentVariable();
-            var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.Contains("/Pull/");
+            var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.ToLower().Contains("/pull/");
             if (isBuildingAPullRequest)
             {
                 Trace.Write("This is a pull request build for pull: " + CurrentPullRequestNo());
