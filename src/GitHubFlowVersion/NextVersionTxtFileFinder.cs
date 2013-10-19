@@ -1,17 +1,20 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 
 namespace GitHubFlowVersion
 {
     public class NextVersionTxtFileFinder : INextVersionTxtFileFinder
     {
+        private readonly string _workingDirectory;
+
+        public NextVersionTxtFileFinder(string workingDirectory)
+        {
+            _workingDirectory = workingDirectory;
+        }
+
         public SemanticVersion GetNextVersion()
         {
-            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var repoPath = GitDirFinder.TreeWalkForGitDir(currentDirectory);
-
-            var version = File.ReadAllText(Path.Combine(repoPath, "..\\NextVersion.txt"));
+            var version = File.ReadAllText(Path.Combine(_workingDirectory, "NextVersion.txt"));
 
             SemanticVersion semanticVersion;
             if (!SemanticVersionParser.TryParse(version, out semanticVersion))

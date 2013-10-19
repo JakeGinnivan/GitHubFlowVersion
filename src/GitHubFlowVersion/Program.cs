@@ -15,8 +15,8 @@ namespace GitHubFlowVersion
 
             Trace.Listeners.Add(new ConsoleTraceListener());
 
-            var currentDirectory = arguments.WorkingDirectory ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var gitDirectory = GitDirFinder.TreeWalkForGitDir(currentDirectory);
+            var workingDirectory = arguments.WorkingDirectory ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var gitDirectory = GitDirFinder.TreeWalkForGitDir(workingDirectory);
             if (string.IsNullOrEmpty(gitDirectory))
             {
                 if (TeamCity.IsRunningInBuildAgent()) //fail the build if we're on a TC build agent
@@ -31,7 +31,7 @@ namespace GitHubFlowVersion
             var gitHelper = new GitHelper();
             var gitRepo = new Repository(gitDirectory);
             var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper);
-            var nextSemverCalculator = new NextSemverCalcualtor(new NextVersionTxtFileFinder(), lastTaggedReleaseFinder);
+            var nextSemverCalculator = new NextSemverCalcualtor(new NextVersionTxtFileFinder(workingDirectory), lastTaggedReleaseFinder);
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper, gitRepo);
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
