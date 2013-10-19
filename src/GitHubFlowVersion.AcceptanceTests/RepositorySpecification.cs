@@ -24,7 +24,7 @@ namespace GitHubFlowVersion.AcceptanceTests
         }
 
         [Fact]
-        public void RunSpecification()
+        public virtual void RunSpecification()
         {
             this.BDDfy();
         }
@@ -38,7 +38,7 @@ namespace GitHubFlowVersion.AcceptanceTests
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to clean up repository path at {0}. Received exception: {1}", RepositoryPath, e);
+                Console.WriteLine("Failed to clean up repository path at {0}. Received exception: {1}", RepositoryPath, e.Message);
             }
         }
     }

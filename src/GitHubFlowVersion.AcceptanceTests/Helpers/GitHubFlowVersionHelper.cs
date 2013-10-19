@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using Xunit;
 
 namespace GitHubFlowVersion.AcceptanceTests.Helpers
 {
@@ -23,6 +24,16 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
             process.WaitForExit();
 
             return process;
+        }
+
+        public static void ShouldContainCorrectBuildVersion(this string output, string version, int commitsSinceTag)
+        {
+            Assert.Contains(string.Format("##teamcity[buildNumber '{0}+{1:000}']", version, commitsSinceTag), output);
+        }
+
+        public static void ShouldContainCorrectFileVersion(this string output, string version)
+        {
+            Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FileVersion' value='{0}']", version), output);
         }
     }
 }

@@ -6,12 +6,18 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
 {
     public static class GitHelper
     {
-        public static void MakeACommit(this IRepository repository)
+        public static Commit MakeACommit(this IRepository repository)
         {
             var randomFile = Path.Combine(repository.Info.WorkingDirectory, Guid.NewGuid().ToString());
             File.WriteAllText(randomFile, string.Empty);
             repository.Index.Stage(randomFile);
-            repository.Commit("Test Commit", new Signature("Test User", "test@email.com", DateTimeOffset.UtcNow));
+            return repository.Commit("Test Commit", new Signature("Test User", "test@email.com", DateTimeOffset.UtcNow));
+        }
+
+        public static Tag MakeATaggedCommit(this IRepository repository, string tag)
+        {
+            var commit = repository.MakeACommit();
+            return repository.Tags.Add(tag, commit);
         }
     }
 }

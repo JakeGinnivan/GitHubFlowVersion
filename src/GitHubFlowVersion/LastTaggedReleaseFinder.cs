@@ -18,7 +18,7 @@ namespace GitHubFlowVersion
             return _lastTaggedRelease.Value;
         }
 
-        private VersionTaggedCommit GetVersion(IRepository gitRepo, IGitHelper gitHelper)
+        private static VersionTaggedCommit GetVersion(IRepository gitRepo, IGitHelper gitHelper)
         {
             var tags = gitRepo.Tags.Select(t =>
             {
@@ -34,7 +34,7 @@ namespace GitHubFlowVersion
             var branch = gitHelper.GetBranch(gitRepo, "master");
             var olderThan = branch.Tip.Committer.When;
             var lastTaggedCommit =
-                branch.Commits.FirstOrDefault(c => c.Committer.When < olderThan && tags.Any(a => a.Commit == c));
+                branch.Commits.FirstOrDefault(c => c.Committer.When <= olderThan && c != branch.Tip && tags.Any(a => a.Commit == c));
 
             if (lastTaggedCommit != null)
                 return tags.Single(a => a.Commit.Sha == lastTaggedCommit.Sha);
