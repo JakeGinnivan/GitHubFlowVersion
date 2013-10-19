@@ -15,8 +15,8 @@ namespace GitHubFlowVersion.Tests
         [Fact]
         public void BuildMetaDataIsIgnoredInEquality()
         {
-            var first = new SemanticVersion(0, 1, 1, buildMetaData: "003");
-            var second = new SemanticVersion(0, 1, 1, buildMetaData: "002");
+            var first = new SemanticVersion(0, 1, 1, buildMetaData: 3);
+            var second = new SemanticVersion(0, 1, 1, buildMetaData: 2);
 
             Assert.Equal(first, second);
             Assert.True(first == second);
@@ -25,7 +25,7 @@ namespace GitHubFlowVersion.Tests
         [Fact]
         public void ToStringAppendsBuildMetaData()
         {
-            var semver = new SemanticVersion(0, 1, 1, buildMetaData: "003");
+            var semver = new SemanticVersion(0, 1, 1, buildMetaData: 3);
 
             Assert.Equal("0.1.1+003", semver.ToString());
         }

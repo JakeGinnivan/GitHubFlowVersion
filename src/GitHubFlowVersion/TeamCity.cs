@@ -11,7 +11,7 @@ namespace GitHubFlowVersion
             var isRunningInBuildAgent = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
             if (isRunningInBuildAgent)
             {
-                Trace.Write("Executing inside a TeamCity build agent");
+                Trace.WriteLine("Executing inside a TeamCity build agent");
             }
             return isRunningInBuildAgent;
         }
@@ -22,7 +22,7 @@ namespace GitHubFlowVersion
             var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.ToLower().Contains("/pull/");
             if (isBuildingAPullRequest)
             {
-                Trace.Write("This is a pull request build for pull: " + CurrentPullRequestNo());
+                Trace.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo());
             }
             return isBuildingAPullRequest;
         }

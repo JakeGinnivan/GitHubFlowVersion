@@ -1,5 +1,4 @@
-﻿using System;
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using NSubstitute;
 using Xunit;
 
@@ -8,10 +7,10 @@ namespace GitHubFlowVersion.Tests
     public class BuildNumberCalculatorTests
     {
         private readonly INextSemverCalculator _nextSemver;
-        private ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
+        private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
         private readonly IRepository _gitRepo;
         private readonly BuildNumberCalculator _sut;
-        private IGitHelper _gitHelper;
+        private readonly IGitHelper _gitHelper;
 
         public BuildNumberCalculatorTests()
         {

@@ -1,7 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using CommandLine;
+using GitHubFlowVersion.OutputStrategies;
 using LibGit2Sharp;
 
 namespace GitHubFlowVersion
@@ -35,17 +39,31 @@ namespace GitHubFlowVersion
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper, gitRepo);
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
-            TeamCityVersionWriter.WriteBuildNumber(nextBuildNumber);
-            TeamCityVersionWriter.WriteAssemblyFileVersion(nextBuildNumber);
+            var variables = GetVariables(nextBuildNumber).ToArray();
+            var outputStrategies = new IOutputStrategy[]
+            {
+                new TeamCityOutputStrategy(),
+                new JsonFileOutputStrategy(),
+                new EnvironmentalVariablesOutputStrategy()
+            };
+            foreach (var outputStrategy in outputStrategies)
+            {
+                outputStrategy.Write(arguments, variables, nextBuildNumber);
+            }
+            
             return 0;
-        } 
-    }
+        }
 
-    public class GitHubFlowArguments
-    {
-        [Option('w', "working-dir", DefaultValue = null, Required = false,
-            HelpText = "The directory of the Git repository to determine the version for; if unspecified it will search parent directories recursively until finding a Git repository."
-        )]
-        public string WorkingDirectory { get; set; }
+        static IEnumerable<Tuple<string, string>> GetVariables(SemanticVersion nextBuildNumber)
+        {
+            yield return Tuple.Create("GitHubFlowVersion.FullSemVer", nextBuildNumber.ToString());
+            yield return Tuple.Create("GitHubFlowVersion.SemVer", nextBuildNumber.WithBuildMetaData(null).ToString());
+            yield return Tuple.Create("GitHubFlowVersion.FourPartVersion", nextBuildNumber.ToVersion().ToString());
+            yield return Tuple.Create("GitHubFlowVersion.Major", nextBuildNumber.Major.ToString());
+            yield return Tuple.Create("GitHubFlowVersion.Minor", nextBuildNumber.Minor.ToString());
+            yield return Tuple.Create("GitHubFlowVersion.Patch", nextBuildNumber.Patch.ToString());
+            string numOfCommitsSinceRelease = nextBuildNumber.BuildMetaData == null ? "<unknown>" : nextBuildNumber.BuildMetaData.ToString();
+            yield return Tuple.Create("GitHubFlowVersion.NumCommitsSinceRelease", numOfCommitsSinceRelease);
+        }
     }
 }

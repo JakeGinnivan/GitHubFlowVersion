@@ -32,9 +32,9 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
             Assert.Contains(string.Format("##teamcity[buildNumber '{0}+{1:000}']", version, commitsSinceTag), output);
         }
 
-        public static void ShouldContainCorrectFileVersion(this string output, string version)
+        public static void ShouldContainFourPartVersionVariable(this string output, string version, int numCommitsToMake)
         {
-            Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FileVersion' value='{0}']", version), output);
+            Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FourPartVersion' value='{0}.{1}']", version, numCommitsToMake), output);
         }
 
         public static void AddNextVersionTxtFile(this IRepository repository, string version)
