@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace GitHubFlowVersion.AcceptanceTests.Helpers
@@ -7,16 +8,12 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
     {
         public static string GetCurrentDirectory()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase.Replace(@"file:///", ""));
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         }
 
-        public static string GetGitTempPath()
+        public static string GetTempPath()
         {
-            var target = Path.Combine(Path.GetDirectoryName(Path.GetTempFileName()), "GitTemp");
-            if (Directory.Exists(target))
-                Directory.Delete(target, true);
-
-            return target;
+            return Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         } 
     }
 }
