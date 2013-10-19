@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="EmptyRepositorySpecification.cs" />
     <Compile Include="Helpers\GitHelper.cs" />
+    <Compile Include="Helpers\GitHubFlowVersionHelper.cs" />
     <Compile Include="Helpers\PathHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

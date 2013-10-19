@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
 using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 
@@ -7,46 +6,23 @@ namespace GitHubFlowVersion.AcceptanceTests
 {
     public class EmptyRepositorySpecification : RepositorySpecification
     {
-        private int _exitCode;
-        
-        public void GivenAnEmptyRepositoryWithMasterBranchAndGitHubFlowPresent()
-        {
-            Repository.MakeACommit();
+        private Process _result;
 
-            foreach (var f in Directory.GetFiles(PathHelper.GetCurrentDirectory(), "*.*", SearchOption.AllDirectories))
-            {
-                var targetFileName = f.Replace(PathHelper.GetCurrentDirectory(), RepositoryPath);
-                var targetDirectory = Path.GetDirectoryName(targetFileName);
-
-                if (!Directory.Exists(targetDirectory))
-                {
-                    Directory.CreateDirectory(targetDirectory);
-                }
-                File.Copy(f, targetFileName);
-            }
-        }
+        public void GivenAnEmptyRepository() {}
         
         public void WhenGitHubFlowVersionIsExecuted()
         {
-            var gitHubFlowVersion = Path.Combine(RepositoryPath, "GitHubFlowVersion.exe");
-            var startInfo = new ProcessStartInfo(gitHubFlowVersion)
-            {
-                WorkingDirectory = RepositoryPath,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                ErrorDialog = false,
-                UseShellExecute = false
-            };
-
-            var process = ProcessHelper.Start(startInfo);
-            process.WaitForExit();
-
-            _exitCode = process.ExitCode;
+            _result = GitHubFlowVersionHelper.ExecuteIn(RepositoryPath);
         }
 
         public void ThenANonZeroExitCodeShouldOccur()
         {
-            Assert.NotEqual(0, _exitCode);
+            Assert.NotEqual(0, _result.ExitCode);
+        }
+
+        public void AndAnErrorAboutNotFindingMasterShouldBeShown()
+        {
+            Assert.Contains("Could not find branch 'master' in the repository", _result.StandardError.ReadToEnd());
         }
     }
 }
