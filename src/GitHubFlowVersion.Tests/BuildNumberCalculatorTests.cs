@@ -7,7 +7,7 @@ namespace GitHubFlowVersion.Tests
 {
     public class BuildNumberCalculatorTests
     {
-        private readonly INextSemverCalcualtor _nextSemver;
+        private readonly INextSemverCalculator _nextSemver;
         private ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
         private readonly IRepository _gitRepo;
         private readonly BuildNumberCalculator _sut;
@@ -15,7 +15,7 @@ namespace GitHubFlowVersion.Tests
 
         public BuildNumberCalculatorTests()
         {
-            _nextSemver = Substitute.For<INextSemverCalcualtor>();
+            _nextSemver = Substitute.For<INextSemverCalculator>();
             _lastTaggedReleaseFinder = Substitute.For<ILastTaggedReleaseFinder>();
             _gitRepo = Substitute.For<IRepository>();
             _gitHelper = Substitute.For<IGitHelper>();

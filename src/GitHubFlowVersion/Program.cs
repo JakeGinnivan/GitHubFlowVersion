@@ -31,7 +31,7 @@ namespace GitHubFlowVersion
             var gitHelper = new GitHelper();
             var gitRepo = new Repository(gitDirectory);
             var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper);
-            var nextSemverCalculator = new NextSemverCalcualtor(new NextVersionTxtFileFinder(workingDirectory), lastTaggedReleaseFinder);
+            var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(workingDirectory), lastTaggedReleaseFinder);
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper, gitRepo);
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();

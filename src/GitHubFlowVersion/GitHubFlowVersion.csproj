@@ -57,10 +57,10 @@
     <Compile Include="GitHelper.cs" />
     <Compile Include="IGitHelper.cs" />
     <Compile Include="ILastTaggedReleaseFinder.cs" />
-    <Compile Include="INextSemverCalcualtor.cs" />
+    <Compile Include="INextSemverCalculator.cs" />
     <Compile Include="INextVersionTxtFileFinder.cs" />
     <Compile Include="LastTaggedReleaseFinder.cs" />
-    <Compile Include="NextSemverCalcualtor.cs" />
+    <Compile Include="NextSemverCalculator.cs" />
     <Compile Include="NextVersionTxtFileFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SemanticVersion.cs" />

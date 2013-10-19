@@ -1,6 +1,6 @@
 ﻿namespace GitHubFlowVersion
 {
-    public interface INextSemverCalcualtor
+    public interface INextSemverCalculator
     {
         SemanticVersion NextVersion();
     }

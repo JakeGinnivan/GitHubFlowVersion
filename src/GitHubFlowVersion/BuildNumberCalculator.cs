@@ -4,13 +4,13 @@ namespace GitHubFlowVersion
 {
     public class BuildNumberCalculator
     {
-        private readonly INextSemverCalcualtor _nextSemverCalculator;
+        private readonly INextSemverCalculator _nextSemverCalculator;
         private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
         private readonly IGitHelper _gitHelper;
         private readonly IRepository _gitRepo;
 
         public BuildNumberCalculator(
-            INextSemverCalcualtor nextSemverCalculator,
+            INextSemverCalculator nextSemverCalculator,
             ILastTaggedReleaseFinder lastTaggedReleaseFinder,
             IGitHelper gitHelper, IRepository gitRepo)
         {
