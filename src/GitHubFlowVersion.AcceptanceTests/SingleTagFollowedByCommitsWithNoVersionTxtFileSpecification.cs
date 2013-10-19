@@ -10,8 +10,8 @@ namespace GitHubFlowVersion.AcceptanceTests
     {
         private Process _result;
         private const string TaggedVersion = "0.1.0";
-        private const string NextVersion = "0.1.1";
-        private int _commitsToMake;
+        private const string ExpectedNextVersion = "0.1.1";
+        private int _numCommitsToMake;
 
         public void GivenARepositoryWithASingleTagAndNoNextVersionFile()
         {
@@ -20,8 +20,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndGivenRepositoryHasAnotherXCommits()
         {
-            for (var i = 0; i < _commitsToMake; i++)
-                Repository.MakeACommit();
+            Repository.MakeCommits(_numCommitsToMake);
         }
         
         public void WhenGitHubFlowVersionIsExecuted()
@@ -37,8 +36,8 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void AndTheCorrectVersionShouldBeOutput()
         {
             var output = _result.StandardOutput.ReadToEnd();
-            output.ShouldContainCorrectBuildVersion(NextVersion, _commitsToMake);
-            output.ShouldContainCorrectFileVersion(NextVersion);
+            output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
+            output.ShouldContainCorrectFileVersion(ExpectedNextVersion);
         }
         [Theory]
         [InlineData(1)]
@@ -47,7 +46,7 @@ namespace GitHubFlowVersion.AcceptanceTests
         [InlineData(10)]
         public void Run(int noCommits)
         {
-            _commitsToMake = noCommits;
+            _numCommitsToMake = noCommits;
             this.BDDfy();
         }
 

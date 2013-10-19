@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RedundantNextVersionTxtVersionSpecification.cs" />
     <Compile Include="SingleTagFollowedByCommitsWithNoVersionTxtFileSpecification.cs" />
     <Compile Include="NoTagsInRepositorySpecification.cs" />
     <Compile Include="EmptyRepositorySpecification.cs" />
