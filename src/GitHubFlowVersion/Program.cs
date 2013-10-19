@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using CommandLine;
 using LibGit2Sharp;
 
 namespace GitHubFlowVersion
@@ -9,9 +10,13 @@ namespace GitHubFlowVersion
     {
         public static int  Main(string[] args)
         {
+            var arguments = new GitHubFlowArguments();
+            Parser.Default.ParseArgumentsStrict(args, arguments);
+
             Trace.Listeners.Add(new ConsoleTraceListener());
-            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string gitDirectory = GitDirFinder.TreeWalkForGitDir(currentDirectory);
+
+            var currentDirectory = arguments.WorkingDirectory ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var gitDirectory = GitDirFinder.TreeWalkForGitDir(currentDirectory);
             if (string.IsNullOrEmpty(gitDirectory))
             {
                 if (TeamCity.IsRunningInBuildAgent()) //fail the build if we're on a TC build agent
@@ -34,5 +39,13 @@ namespace GitHubFlowVersion
             TeamCityVersionWriter.WriteAssemblyFileVersion(nextBuildNumber);
             return 0;
         } 
+    }
+
+    public class GitHubFlowArguments
+    {
+        [Option('w', "working-dir", DefaultValue = null, Required = false,
+            HelpText = "The directory of the Git repository to determine the version for; if unspecified it will search parent directories recursively until finding a Git repository."
+        )]
+        public string WorkingDirectory { get; set; }
     }
 }
