@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using LibGit2Sharp;
 
 namespace GitHubFlowVersion.AcceptanceTests.Helpers
@@ -12,6 +13,13 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
             File.WriteAllText(randomFile, string.Empty);
             repository.Index.Stage(randomFile);
             return repository.Commit("Test Commit", new Signature("Test User", "test@email.com", DateTimeOffset.UtcNow));
+        }
+
+        public static Commit[] MakeCommits(this IRepository repository, int numCommitsToMake)
+        {
+            return Enumerable.Range(1, numCommitsToMake)
+                .Select(x => repository.MakeACommit())
+                .ToArray();
         }
 
         public static Tag MakeATaggedCommit(this IRepository repository, string tag)

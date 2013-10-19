@@ -1,11 +1,12 @@
 ﻿namespace GitHubFlowVersion
 {
-    public class NextSemverCalcualtor : INextSemverCalcualtor
+    // todo: fix spelling mistake
+    public class NextSemverCalculator : INextSemverCalculator
     {
         private readonly INextVersionTxtFileFinder _nextVersionTxtFileFinder;
         private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
 
-        public NextSemverCalcualtor(
+        public NextSemverCalculator(
             INextVersionTxtFileFinder nextVersionTxtFileFinder,
             ILastTaggedReleaseFinder lastTaggedReleaseFinder)
         {

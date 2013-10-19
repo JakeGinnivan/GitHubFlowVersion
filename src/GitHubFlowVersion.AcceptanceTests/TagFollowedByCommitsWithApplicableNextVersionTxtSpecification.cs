@@ -6,22 +6,27 @@ using Xunit.Extensions;
 
 namespace GitHubFlowVersion.AcceptanceTests
 {
-    public class SingleTagFollowedByCommitsWithNoVersionTxtFileSpecification : RepositorySpecification
+    public class TagFollowedByCommitsWithApplicableNextVersionTxtSpecification : RepositorySpecification
     {
         private Process _result;
-        private const string TaggedVersion = "0.1.0";
-        private const string NextVersion = "0.1.1";
-        private int _commitsToMake;
+        private const string TaggedVersion = "1.0.3";
+        private int _numCommitsToMake;
+        private const string NextVersionTxtVersion = "1.1.0";
+        private const string ExpectedNextVersion = "1.1.0";
 
-        public void GivenARepositoryWithASingleTagAndNoNextVersionFile()
+        public void GivenARepositoryWithASingleTag()
         {
             Repository.MakeATaggedCommit(TaggedVersion);
         }
 
         public void AndGivenRepositoryHasAnotherXCommits()
         {
-            for (var i = 0; i < _commitsToMake; i++)
-                Repository.MakeACommit();
+            Repository.MakeCommits(_numCommitsToMake);
+        }
+
+        public void AndGivenRepositoryHasARedundantNextVersionTxtFile()
+        {
+            Repository.AddNextVersionTxtFile(NextVersionTxtVersion);
         }
         
         public void WhenGitHubFlowVersionIsExecuted()
@@ -37,8 +42,8 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void AndTheCorrectVersionShouldBeOutput()
         {
             var output = _result.StandardOutput.ReadToEnd();
-            output.ShouldContainCorrectBuildVersion(NextVersion, _commitsToMake);
-            output.ShouldContainCorrectFileVersion(NextVersion);
+            output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
+            output.ShouldContainCorrectFileVersion(ExpectedNextVersion);
         }
         [Theory]
         [InlineData(1)]
@@ -47,12 +52,11 @@ namespace GitHubFlowVersion.AcceptanceTests
         [InlineData(10)]
         public void Run(int noCommits)
         {
-            _commitsToMake = noCommits;
+            _numCommitsToMake = noCommits;
             this.BDDfy();
         }
 
         // todo: need to figure out a better way to get XUnit to ignore this - maybe this shouldn't be in the base class?
         public override void RunSpecification() { }
-
     }
 }

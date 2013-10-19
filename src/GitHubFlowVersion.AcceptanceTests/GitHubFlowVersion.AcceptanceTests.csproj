@@ -56,7 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SingleTagFollowedByCommitsWithNoVersionTxtFileSpecification.cs" />
+    <Compile Include="TagFollowedByCommitsWithApplicableNextVersionTxtSpecification.cs" />
+    <Compile Include="TagFollowedByCommitsWithRedundantNextVersionTxtSpecification.cs" />
+    <Compile Include="TagFollowedByCommitsWithNoNextVersionTxtSpecification.cs" />
     <Compile Include="NoTagsInRepositorySpecification.cs" />
     <Compile Include="EmptyRepositorySpecification.cs" />
     <Compile Include="Helpers\GitHelper.cs" />

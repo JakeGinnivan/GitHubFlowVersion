@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using LibGit2Sharp;
 using Xunit;
 
 namespace GitHubFlowVersion.AcceptanceTests.Helpers
@@ -34,6 +35,12 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
         public static void ShouldContainCorrectFileVersion(this string output, string version)
         {
             Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FileVersion' value='{0}']", version), output);
+        }
+
+        public static void AddNextVersionTxtFile(this IRepository repository, string version)
+        {
+            var nextVersionFile = Path.Combine(repository.Info.WorkingDirectory, "NextVersion.txt");
+            File.WriteAllText(nextVersionFile, version);
         }
     }
 }
