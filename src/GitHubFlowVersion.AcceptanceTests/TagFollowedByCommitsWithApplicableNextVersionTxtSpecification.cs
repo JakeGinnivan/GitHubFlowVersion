@@ -6,14 +6,15 @@ using Xunit.Extensions;
 
 namespace GitHubFlowVersion.AcceptanceTests
 {
-    public class SingleTagFollowedByCommitsWithNoVersionTxtFileSpecification : RepositorySpecification
+    public class TagFollowedByCommitsWithApplicableNextVersionTxtSpecification : RepositorySpecification
     {
         private Process _result;
-        private const string TaggedVersion = "0.1.0";
-        private const string ExpectedNextVersion = "0.1.1";
+        private const string TaggedVersion = "1.0.3";
         private int _numCommitsToMake;
+        private const string NextVersionTxtVersion = "1.1.0";
+        private const string ExpectedNextVersion = "1.1.0";
 
-        public void GivenARepositoryWithASingleTagAndNoNextVersionFile()
+        public void GivenARepositoryWithASingleTag()
         {
             Repository.MakeATaggedCommit(TaggedVersion);
         }
@@ -21,6 +22,11 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void AndGivenRepositoryHasAnotherXCommits()
         {
             Repository.MakeCommits(_numCommitsToMake);
+        }
+
+        public void AndGivenRepositoryHasARedundantNextVersionTxtFile()
+        {
+            Repository.AddNextVersionTxtFile(NextVersionTxtVersion);
         }
         
         public void WhenGitHubFlowVersionIsExecuted()
@@ -52,6 +58,5 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         // todo: need to figure out a better way to get XUnit to ignore this - maybe this shouldn't be in the base class?
         public override void RunSpecification() { }
-
     }
 }
