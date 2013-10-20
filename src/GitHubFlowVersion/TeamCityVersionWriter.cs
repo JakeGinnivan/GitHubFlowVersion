@@ -9,11 +9,10 @@ namespace GitHubFlowVersion
             Console.WriteLine("##teamcity[buildNumber '{0}']", version);
         }
 
-        public static void WriteAssemblyFileVersion(SemanticVersion version)
+        public static void WriteParameter(string name, string value)
         {
-            Console.WriteLine("##teamcity[setParameter name='GitHubFlowVersion.FileVersion' value='{0}.{1}.{2}']", 
-                version.Major, version.Minor, version.Patch);
+            Console.WriteLine("##teamcity[setParameter name='{0}' value='{1}']", 
+                name, value);
         }
-
     }
 }

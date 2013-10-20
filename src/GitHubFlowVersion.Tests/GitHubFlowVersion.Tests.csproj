@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SemanticVersionCompareTestsData.cs" />
     <Compile Include="SemanticVersionTests.cs" />
+    <Compile Include="VariableProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

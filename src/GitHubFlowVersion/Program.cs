@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using CommandLine;
+using GitHubFlowVersion.OutputStrategies;
 using LibGit2Sharp;
 
 namespace GitHubFlowVersion
@@ -18,6 +19,7 @@ namespace GitHubFlowVersion
             var workingDirectory = arguments.WorkingDirectory ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var gitDirectory = GitDirFinder.TreeWalkForGitDir(workingDirectory);
             if (string.IsNullOrEmpty(gitDirectory))
+            if (string.IsNullOrEmpty(gitDirectory))
             {
                 if (TeamCity.IsRunningInBuildAgent()) //fail the build if we're on a TC build agent
                 {
@@ -28,24 +30,31 @@ namespace GitHubFlowVersion
                 Trace.TraceError("Failed to find .git directory.");
                 return 0;
             }
+
+            Trace.WriteLine(string.Format("Git directory found at {0}", gitDirectory));
+            var repositoryRoot = Directory.GetParent(gitDirectory).FullName;
+
             var gitHelper = new GitHelper();
             var gitRepo = new Repository(gitDirectory);
             var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper);
-            var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(workingDirectory), lastTaggedReleaseFinder);
+            var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(repositoryRoot), lastTaggedReleaseFinder);
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper, gitRepo);
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
-            TeamCityVersionWriter.WriteBuildNumber(nextBuildNumber);
-            TeamCityVersionWriter.WriteAssemblyFileVersion(nextBuildNumber);
+            var variableProvider = new VariableProvider();
+            var variables = variableProvider.GetVariables(nextBuildNumber);
+            var outputStrategies = new IOutputStrategy[]
+            {
+                new TeamCityOutputStrategy(),
+                new JsonFileOutputStrategy(),
+                new EnvironmentalVariablesOutputStrategy()
+            };
+            foreach (var outputStrategy in outputStrategies)
+            {
+                outputStrategy.Write(arguments, variables, nextBuildNumber);
+            }
+            
             return 0;
-        } 
-    }
-
-    public class GitHubFlowArguments
-    {
-        [Option('w', "working-dir", DefaultValue = null, Required = false,
-            HelpText = "The directory of the Git repository to determine the version for; if unspecified it will search parent directories recursively until finding a Git repository."
-        )]
-        public string WorkingDirectory { get; set; }
+        }
     }
 }

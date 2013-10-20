@@ -7,9 +7,10 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
 {
     public static class GitHubFlowVersionHelper
     {
-        public static Process ExecuteIn(string workingDirectory)
+        public static Process ExecuteIn(string workingDirectory, string toFile = null)
         {
             var gitHubFlowVersion = Path.Combine(PathHelper.GetCurrentDirectory(), "GitHubFlowVersion.exe");
+            string toFileArg = toFile == null ? null : string.Format(" -f \"{0}\"", toFile);
             var startInfo = new ProcessStartInfo(gitHubFlowVersion)
             {
                 WorkingDirectory = workingDirectory,
@@ -17,7 +18,7 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
                 WindowStyle = ProcessWindowStyle.Hidden,
                 ErrorDialog = false,
                 UseShellExecute = false,
-                Arguments = string.Format("-w \"{0}\"", workingDirectory),
+                Arguments = string.Format("-w \"{0}\"{1}", workingDirectory, toFileArg),
                 RedirectStandardError = true,
                 RedirectStandardOutput = true
             };
@@ -32,9 +33,9 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
             Assert.Contains(string.Format("##teamcity[buildNumber '{0}+{1:000}']", version, commitsSinceTag), output);
         }
 
-        public static void ShouldContainCorrectFileVersion(this string output, string version)
+        public static void ShouldContainFourPartVersionVariable(this string output, string version, int numCommitsToMake)
         {
-            Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FileVersion' value='{0}']", version), output);
+            Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FourPartVersion' value='{0}.{1}']", version, numCommitsToMake), output);
         }
 
         public static void AddNextVersionTxtFile(this IRepository repository, string version)

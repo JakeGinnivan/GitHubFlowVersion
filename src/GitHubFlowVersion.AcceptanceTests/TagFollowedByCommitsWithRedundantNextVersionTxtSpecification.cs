@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 using TestStack.BDDfy;
@@ -17,6 +18,11 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void GivenARepositoryWithASingleTag()
         {
             Repository.MakeATaggedCommit(TaggedVersion);
+        }
+
+        public void AndGivenRunningInTeamCity()
+        {
+            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
         }
 
         public void AndGivenRepositoryHasAnotherXCommits()
@@ -43,7 +49,7 @@ namespace GitHubFlowVersion.AcceptanceTests
         {
             var output = _result.StandardOutput.ReadToEnd();
             output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
-            output.ShouldContainCorrectFileVersion(ExpectedNextVersion);
+            output.ShouldContainFourPartVersionVariable(ExpectedNextVersion, _numCommitsToMake);
         }
         [Theory]
         [InlineData(1)]
@@ -56,7 +62,6 @@ namespace GitHubFlowVersion.AcceptanceTests
             this.BDDfy();
         }
 
-        // todo: need to figure out a better way to get XUnit to ignore this - maybe this shouldn't be in the base class?
-        public override void RunSpecification() { }
+        protected new void RunSpecification() { }
     }
 }
