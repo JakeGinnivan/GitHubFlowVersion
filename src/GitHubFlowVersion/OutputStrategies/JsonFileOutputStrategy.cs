@@ -17,13 +17,16 @@ namespace GitHubFlowVersion.OutputStrategies
             for (var index = 0; index < variableList.Length; index++)
             {
                 var variable = variableList[index];
-                stringBuilder.AppendFormat("    \"{0}\"=\"{1}\"{2}", variable.Key, variable.Value,
-                    index < variableList.Length ? "," : string.Empty);
+                stringBuilder.AppendFormat("    \"{0}\": \"{1}\"{2}", variable.Key, variable.Value,
+                    index < variableList.Length - 1 ? "," : string.Empty);
                 stringBuilder.AppendLine();
             }
 
             stringBuilder.AppendLine("}");
 
+            var directoryName = Path.GetDirectoryName(gitHubFlowConfiguration.ToFile);
+            if (!Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName);
             File.WriteAllText(gitHubFlowConfiguration.ToFile, stringBuilder.ToString());
         }
     }

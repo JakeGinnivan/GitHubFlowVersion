@@ -7,9 +7,10 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
 {
     public static class GitHubFlowVersionHelper
     {
-        public static Process ExecuteIn(string workingDirectory)
+        public static Process ExecuteIn(string workingDirectory, string toFile = null)
         {
             var gitHubFlowVersion = Path.Combine(PathHelper.GetCurrentDirectory(), "GitHubFlowVersion.exe");
+            string toFileArg = toFile == null ? null : string.Format(" -f \"{0}\"", toFile);
             var startInfo = new ProcessStartInfo(gitHubFlowVersion)
             {
                 WorkingDirectory = workingDirectory,
@@ -17,7 +18,7 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
                 WindowStyle = ProcessWindowStyle.Hidden,
                 ErrorDialog = false,
                 UseShellExecute = false,
-                Arguments = string.Format("-w \"{0}\"", workingDirectory),
+                Arguments = string.Format("-w \"{0}\"{1}", workingDirectory, toFileArg),
                 RedirectStandardError = true,
                 RedirectStandardOutput = true
             };

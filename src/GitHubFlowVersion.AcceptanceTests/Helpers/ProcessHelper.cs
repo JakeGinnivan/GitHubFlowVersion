@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Xunit;
 
 namespace GitHubFlowVersion.AcceptanceTests.Helpers
 {
-    public class ProcessHelper
+    public static class ProcessHelper
     {
         private static volatile object _lockObject = new object();
 
@@ -23,6 +24,16 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
             }
 
             return process;
+        }
+
+        public static void ExitedWithoutError(this Process process)
+        {
+            if (process.ExitCode != 0)
+            {
+                Trace.WriteLine(process.StandardOutput.ReadToEnd());
+                Trace.WriteLine(process.StandardError.ReadToEnd());
+                Assert.Equal(0, process.ExitCode);
+            }
         }
 
         [Flags]

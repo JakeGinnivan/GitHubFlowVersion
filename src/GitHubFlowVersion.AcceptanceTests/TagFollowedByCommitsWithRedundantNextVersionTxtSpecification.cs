@@ -62,7 +62,6 @@ namespace GitHubFlowVersion.AcceptanceTests
             this.BDDfy();
         }
 
-        // todo: need to figure out a better way to get XUnit to ignore this - maybe this shouldn't be in the base class?
-        public override void RunSpecification() { }
+        protected new void RunSpecification() { }
     }
 }

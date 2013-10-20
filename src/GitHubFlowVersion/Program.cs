@@ -19,6 +19,7 @@ namespace GitHubFlowVersion
             var workingDirectory = arguments.WorkingDirectory ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var gitDirectory = GitDirFinder.TreeWalkForGitDir(workingDirectory);
             if (string.IsNullOrEmpty(gitDirectory))
+            if (string.IsNullOrEmpty(gitDirectory))
             {
                 if (TeamCity.IsRunningInBuildAgent()) //fail the build if we're on a TC build agent
                 {
@@ -29,10 +30,14 @@ namespace GitHubFlowVersion
                 Trace.TraceError("Failed to find .git directory.");
                 return 0;
             }
+
+            Trace.WriteLine(string.Format("Git directory found at {0}", gitDirectory));
+            var repositoryRoot = Directory.GetParent(gitDirectory).FullName;
+
             var gitHelper = new GitHelper();
             var gitRepo = new Repository(gitDirectory);
             var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper);
-            var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(workingDirectory), lastTaggedReleaseFinder);
+            var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(repositoryRoot), lastTaggedReleaseFinder);
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper, gitRepo);
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
