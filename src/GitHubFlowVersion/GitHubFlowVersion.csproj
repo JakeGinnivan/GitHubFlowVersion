@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BuildNumberCalculator.cs" />
     <Compile Include="GitHubFlowArguments.cs" />
+    <Compile Include="IVariableProvider.cs" />
     <Compile Include="OutputStrategies\EnvironmentalVariablesOutputStrategy.cs" />
     <Compile Include="OutputStrategies\IOutputStrategy.cs" />
     <Compile Include="OutputStrategies\JsonFileOutputStrategy.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SemanticVersionParser.cs" />
     <Compile Include="TeamCity.cs" />
+    <Compile Include="VariableProvider.cs" />
     <Compile Include="VersionTaggedCommit.cs" />
   </ItemGroup>
   <ItemGroup>

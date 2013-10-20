@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +7,7 @@ namespace GitHubFlowVersion.OutputStrategies
 {
     public class JsonFileOutputStrategy : IOutputStrategy
     {
-        public void Write(GitHubFlowArguments gitHubFlowConfiguration, IEnumerable<Tuple<string, string>> variables, SemanticVersion nextBuildNumber)
+        public void Write(GitHubFlowArguments gitHubFlowConfiguration, Dictionary<string, string> variables, SemanticVersion nextBuildNumber)
         {
             if (string.IsNullOrEmpty(gitHubFlowConfiguration.ToFile)) return;
 
@@ -18,7 +17,7 @@ namespace GitHubFlowVersion.OutputStrategies
             for (var index = 0; index < variableList.Length; index++)
             {
                 var variable = variableList[index];
-                stringBuilder.AppendFormat("    \"{0}\"=\"{1}\"{2}", variable.Item1, variable.Item2,
+                stringBuilder.AppendFormat("    \"{0}\"=\"{1}\"{2}", variable.Key, variable.Value,
                     index < variableList.Length ? "," : string.Empty);
                 stringBuilder.AppendLine();
             }
