@@ -31,9 +31,11 @@ All builds on the same branch as the last SemVer tag (vLast) will have the forma
 For example, I tag a release 0.2.0 (so the tag is on the HEAD of master), then I merge a pull request with 2 commits, the build number will be:  
 `0.2.1+003`
 
-This is because all commits on master are potentially shipable increments of your software, the `+` in semver has NO SEMANTIC MEANING, so 0.2.1+003 == 0.2.1+234
+The build metadata (+003) has no semantic meaning in SemVer, so version `0.2.1+003` == `0.2.1+100`, this is good for releases because you can commit multiple times producing the same semantic version, but a different build number.
 
-The build metadata is added so you know 
+This is bad for CI (exposing say a TeamCity NuGet feed) because each build is the same version, so you will not be able to just upgrade between CI Builds.
+
+If you need this, the `GitHubFlowVersion.FourPartVersionNumber` variable is available, which will produce `0.2.1.3` instead of `0.2.1+003`. 
 
 #### Pull Requests
 Pull requests are automatically tagged as pre-release, for example:
@@ -48,11 +50,28 @@ This allows you to have short lived branches for a pre-release, improve it. Then
 ## How to use it
 GitHubFlow version at the moment is designed to work with TeamCity and be as simple as possible, so it is an exe and writes the build number out to TeamCity.
 
-1. Call `GitHubFlowVersion.exe`, it will calculate the build number, and write it out to the TeamCity %build.number% variable.
-2. Call your build scripts/whatever and use %build.number% which will be the SemVer  
-%GitHubFlowVersion.FileVersion% will also be available to use (if you are patching assembly info)
+There are a few ways to use GitHubFlowVersion, all involve making a bunch of variables available to you. They are
+
+GitHubFlowVersion.FullSemVer, GitHubFlowVersion.SemVer, GitHubFlowVersion.FourPartVersion  
+GitHubFlowVersion.Major, GitHubFlowVersion.Minor, GitHubFlowVersion.Patch  
+GitHubFlowVersion.NumCommitsSinceRelease, GitHubFlowVersion.Tag
+
+Documentation about these variables is available at https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/src/GitHubFlowVersion.Tests/VariableProviderTests.cs (the variable provider test)
+
+### 1. Through TeamCity
+Just run `GitHubFlowVersion.exe` as the first step of your build, it will set the build number in teamcity to the FullSemVer
+then all the variables above will be available as `system` variables so they will automatically be passed to any build system you use.
 
 For the moment you need to promote the %teamcity.build.vcs.branch.{configurationid}% build parameter to an environment variable with the same name for pull requests to be handled correctly
+
+### 2. Environmental Variables through GitHubFlowVersion (In progress)
+The second option which will work for non-dotnet/msbuild/teamcity configurations is to use the `-Exec` or `-Project` switches
+
+#### -Exec
+This will set the above variables as process level environmental variables, then will run the command line (exec) or the msbuild project file (-Project).
+
+GitHubFlowVersion has to be the one which executes your build system because process level environmental variabes will not be available to the parent process, but they will be available to child proccesses.
+
 
 ### How do I patch assembly info?
 I would suggest using [https://github.com/loresoft/msbuildtasks](https://github.com/loresoft/msbuildtasks) in your MSBuild script, a sample is available at [https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj](https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj)
