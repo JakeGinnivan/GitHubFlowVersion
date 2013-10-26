@@ -32,7 +32,7 @@ namespace GitHubFlowVersion
                     Console.WriteLine("No local branch with name {0} found, going to try on the remote {1}({2})", name, remote.Name, remote.Url);
                     try
                     {
-                        repository.Network.Fetch(remote, TagFetchMode.All);
+                        repository.Network.Fetch(remote);
                     }
                     catch (LibGit2SharpException exception)
                     {

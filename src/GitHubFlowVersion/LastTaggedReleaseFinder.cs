@@ -21,25 +21,6 @@ namespace GitHubFlowVersion
         private static VersionTaggedCommit GetVersion(IRepository gitRepo, IGitHelper gitHelper)
         {
             var branch = gitHelper.GetBranch(gitRepo, "master");
-            VersionTaggedCommit versionTaggedCommit;
-            try
-            {
-                versionTaggedCommit = GetVersionTaggedCommit(gitRepo, branch);
-            }
-            catch (Exception)
-            {
-                // If we cannot find the tagged commit, then try to fetch tags from the remote before giving up
-                var remote = gitRepo.Network.Remotes.FirstOrDefault();
-                if (remote == null)
-                    throw;
-                gitRepo.Network.Fetch(remote, TagFetchMode.All);
-                versionTaggedCommit = GetVersionTaggedCommit(gitRepo, branch);
-            }
-            return versionTaggedCommit;
-        }
-
-        private static VersionTaggedCommit GetVersionTaggedCommit(IRepository gitRepo, Branch branch)
-        {
             var tags = gitRepo.Tags.Select(t =>
             {
                 SemanticVersion version;
