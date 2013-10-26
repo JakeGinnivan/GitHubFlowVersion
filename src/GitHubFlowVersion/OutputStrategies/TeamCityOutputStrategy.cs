@@ -11,7 +11,7 @@ namespace GitHubFlowVersion.OutputStrategies
                 TeamCityVersionWriter.WriteBuildNumber(nextBuildNumber);
                 foreach (var variable in variables)
                 {
-                    TeamCityVersionWriter.WriteParameter(variable.Key, variable.Value);
+                    TeamCityVersionWriter.WriteParameter(variable.Key.Replace('_', '.'), variable.Value);
                 }
             }
         }

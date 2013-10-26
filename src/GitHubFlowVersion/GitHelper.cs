@@ -29,13 +29,13 @@ namespace GitHubFlowVersion
 
                 if (!repository.Network.Remotes.Any())
                 {
-                    Trace.Write("No remotes found");
+                    //Console.WriteLine("No remotes found");
                 }
                 else
                 {
                     var remote = repository.Network.Remotes.First();
 
-                    Trace.Write(string.Format("No local branch with name {0} found, going to try on the remote {1}({2})", name, remote.Name, remote.Url));
+                    Console.WriteLine("No local branch with name {0} found, going to try on the remote {1}({2})", name, remote.Name, remote.Url);
                     try
                     {
                         repository.Network.Fetch(remote);

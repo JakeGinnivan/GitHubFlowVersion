@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.IO;
 using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 
@@ -6,7 +7,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 {
     public class TagFollowedByCommitsWithNoNextVersionTxtSpecification : RepositorySpecification
     {
-        private Process _result;
+        private ExecutionResults _result;
 
         public void GivenARepositoryWithASingleTagFollowedByCommits()
         {
@@ -15,20 +16,30 @@ namespace GitHubFlowVersion.AcceptanceTests
         }
 
         public void AndGivenThereIsNoNextVersionTxtFile() {}
-        
+
+        public void AndGivenRunningInTeamCity()
+        {
+            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
+        }
+
         public void WhenGitHubFlowVersionIsExecuted()
         {
             _result = GitHubFlowVersionHelper.ExecuteIn(RepositoryPath);
         }
 
-        public void ThenANonZeroExitCodeShouldOccur()
+        public void ThenNoErrorShouldOccur()
         {
-            Assert.NotEqual(0, _result.ExitCode);
+            _result.AssertExitedSuccessfully();
         }
 
         public void AndTheCorrectVersionShouldBeOutput()
         {
-            Assert.Contains("", _result.StandardError.ReadToEnd());
+            Assert.Contains("0.1.1", _result.Output);
+        }
+
+        public void AndTheNextVersionTxtFileShouldBeCreatedWithLastTag()
+        {
+            Assert.Equal("0.1.0", File.ReadAllText(Path.Combine(RepositoryPath, "NextVersion.txt")));
         }
     }
 }

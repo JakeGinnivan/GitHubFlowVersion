@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Web.Script.Serialization;
 using GitHubFlowVersion.AcceptanceTests.Helpers;
@@ -10,7 +9,7 @@ namespace GitHubFlowVersion.AcceptanceTests
     public class ToFileSpecification : RepositorySpecification
     {
         private string _tempFile;
-        private Process _result;
+        private ExecutionResults _result;
         private const string TaggedVersion = "1.2.3";
 
         public void GivenARepositoryWithATaggedCommit()
@@ -32,14 +31,14 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void ThenProcessExitedWithoutError()
         {
-            _result.ExitedWithoutError();
+            _result.AssertExitedSuccessfully();
         }
 
         public void ThenVariablesShouldBeWrittenToOutputFile()
         {
             var output = File.ReadAllText(_tempFile);
             var variables = (Dictionary<string, object>)new JavaScriptSerializer().DeserializeObject(output);
-            Assert.Equal("1.2.4+001", (string)variables["GitHubFlowVersion.FullSemVer"]);
+            Assert.Equal("1.2.4+001", (string)variables["GitHubFlowVersion_FullSemVer"]);
         }
     }
 }

@@ -11,8 +11,7 @@ namespace GitHubFlowVersion
 
         public static void WriteParameter(string name, string value)
         {
-            Console.WriteLine("##teamcity[setParameter name='{0}' value='{1}']", 
-                name, value);
+            Console.WriteLine("##teamcity[setParameter name='{0}' value='{1}']", name, value);
         }
     }
 }

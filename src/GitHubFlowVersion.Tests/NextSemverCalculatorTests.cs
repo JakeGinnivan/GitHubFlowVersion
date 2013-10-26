@@ -23,7 +23,7 @@ namespace GitHubFlowVersion.Tests
             var currentVersion = new SemanticVersion(0, 1, 0);
             var commit = Substitute.For<Commit>();
             _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(commit, currentVersion));
-            _txtFileVersion.GetNextVersion().Returns(currentVersion);
+            _txtFileVersion.GetNextVersion(currentVersion).Returns(currentVersion);
 
             var nextVersion = _sut.NextVersion();
 
@@ -37,7 +37,7 @@ namespace GitHubFlowVersion.Tests
             var fileVersion = new SemanticVersion(0, 0, 1);
             var commit = Substitute.For<Commit>();
             _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(commit, currentVersion));
-            _txtFileVersion.GetNextVersion().Returns(fileVersion);
+            _txtFileVersion.GetNextVersion(currentVersion).Returns(fileVersion);
 
             var nextVersion = _sut.NextVersion();
 
@@ -51,7 +51,7 @@ namespace GitHubFlowVersion.Tests
             var fileVersion = new SemanticVersion(1, 0, 0);
             var commit = Substitute.For<Commit>();
             _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(commit, currentVersion));
-            _txtFileVersion.GetNextVersion().Returns(fileVersion);
+            _txtFileVersion.GetNextVersion(currentVersion).Returns(fileVersion);
 
             var nextVersion = _sut.NextVersion();
 

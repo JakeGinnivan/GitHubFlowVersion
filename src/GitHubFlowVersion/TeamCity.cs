@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 
 namespace GitHubFlowVersion
 {
@@ -11,7 +10,7 @@ namespace GitHubFlowVersion
             var isRunningInBuildAgent = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
             if (isRunningInBuildAgent)
             {
-                Trace.WriteLine("Executing inside a TeamCity build agent");
+                Console.WriteLine("Executing inside a TeamCity build agent");
             }
             return isRunningInBuildAgent;
         }
@@ -22,7 +21,7 @@ namespace GitHubFlowVersion
             var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.ToLower().Contains("/pull/");
             if (isBuildingAPullRequest)
             {
-                Trace.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo());
+                Console.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo());
             }
             return isBuildingAPullRequest;
         }
@@ -34,12 +33,11 @@ namespace GitHubFlowVersion
             {
                 if (((string)de.Key).StartsWith("teamcity.build.vcs.branch.", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Trace.WriteLine(string.Format("Found Teamcity Branch: {0}", de.Value));
+                    Console.WriteLine("Found Teamcity Branch: {0}", de.Value);
                     return (string)de.Value;
                 }
             }
 
-            Trace.WriteLine("Could not find branch information from TeamCity");
             return null;
         }
 

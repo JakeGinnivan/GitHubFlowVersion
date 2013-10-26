@@ -12,9 +12,14 @@ namespace GitHubFlowVersion
             _workingDirectory = workingDirectory;
         }
 
-        public SemanticVersion GetNextVersion()
+        public SemanticVersion GetNextVersion(SemanticVersion taggedVersion)
         {
-            var version = File.ReadAllText(Path.Combine(_workingDirectory, "NextVersion.txt"));
+            var filePath = Path.Combine(_workingDirectory, "NextVersion.txt");
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, taggedVersion.ToString());
+            }
+            var version = File.ReadAllText(filePath);
 
             SemanticVersion semanticVersion;
             if (!SemanticVersionParser.TryParse(version, out semanticVersion))
