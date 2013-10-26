@@ -8,6 +8,7 @@
     <DropPath>$(Root)build\Artifacts\</DropPath>
   </PropertyGroup>
   <Import Project="$(MSBuildCommunityTasksPath)MSBuild.Community.Tasks.Targets"/>
+  <UsingTask AssemblyFile="$(Root)tools\xunit.net\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit"/>
 
   <Target Name="Cleanup">
     <Error Condition="$(Root) == ''" Text="Root variable must be defined" />
@@ -40,18 +41,16 @@
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
-    <ItemGroup>
-      <xUnit Include="$(Root)src\packages\xunit.runners.*\tools\xunit.console.clr4.exe" />
-    </ItemGroup>
-    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll" />
+    <xunit Assembly="$(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll" ShadowCopy="False" />
+    <xunit Assembly="$(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll" ShadowCopy="False" />
   </Target>
 
-  <Target Name="Publish" DependsOnTargets="Build">
+  <Target Name="Publish" DependsOnTargets="Test">
     <ItemGroup>
       <BuildOutput Include="$(Root)src\GitHubFlowVersion\bin\$(Configuration)\**\*.*"/>
     </ItemGroup>
 
     <Copy SourceFiles="@(BuildOutput)"
-    			DestinationFiles="@(BuildOutput->'$(DropPath)Files\%(RecursiveDir)%(Filename)%(Extension)')" />
+          DestinationFiles="@(BuildOutput->'$(DropPath)Files\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>

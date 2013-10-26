@@ -12,7 +12,6 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void GivenARepositoryWithATaggedCommit()
         {
             Repository.MakeATaggedCommit(TaggedVersion);
-            Repository.MakeACommit();
         }
 
         public void AndGivenThereIsANextVersionTxtFile()
@@ -34,7 +33,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndThenVariablesShouldBeAvailableToProcess()
         {
-            Assert.Contains("GitHubFlowVersion_FullSemVer: 1.2.4+001", _result.Output);
+            Assert.Contains("GitHubFlowVersion_FullSemVer: 1.2.4", _result.Output);
         }
     }
 }

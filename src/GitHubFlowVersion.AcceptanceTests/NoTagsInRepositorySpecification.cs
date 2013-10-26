@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using GitHubFlowVersion.AcceptanceTests.Helpers;
+﻿using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 
 namespace GitHubFlowVersion.AcceptanceTests

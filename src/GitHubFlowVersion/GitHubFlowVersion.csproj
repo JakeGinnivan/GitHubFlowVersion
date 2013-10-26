@@ -51,15 +51,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildNumberCalculator.cs" />
+    <Compile Include="BuildServers\IBuildServer.cs" />
+    <Compile Include="BuildServers\LocalBuild.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="GitHubFlowArguments.cs" />
     <Compile Include="IVariableProvider.cs" />
     <Compile Include="OutputStrategies\EnvironmentalVariablesOutputStrategy.cs" />
     <Compile Include="OutputStrategies\IOutputStrategy.cs" />
     <Compile Include="OutputStrategies\JsonFileOutputStrategy.cs" />
-    <Compile Include="OutputStrategies\TeamCityOutputStrategy.cs" />
+    <Compile Include="OutputStrategies\BuildServerOutputStrategy.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="TeamCityVersionWriter.cs" />
+    <Compile Include="BuildServers\TeamCityVersionWriter.cs" />
     <Compile Include="GitDirFinder.cs" />
     <Compile Include="GitHelper.cs" />
     <Compile Include="IGitHelper.cs" />
@@ -72,7 +74,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SemanticVersionParser.cs" />
-    <Compile Include="TeamCity.cs" />
+    <Compile Include="BuildServers\TeamCity.cs" />
     <Compile Include="VariableProvider.cs" />
     <Compile Include="VersionTaggedCommit.cs" />
   </ItemGroup>
