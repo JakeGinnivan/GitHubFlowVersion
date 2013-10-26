@@ -41,10 +41,10 @@
 
   <Target Name="Test" DependsOnTargets="Build">
     <ItemGroup>
-      <xUnit Include="$(Root)src\packages\xunit.runners.*\tools\xunit.console.clr4.exe" />
+      <xUnit Include="$(Root)src\packages\xunit.runners.*\tools\xunit.console.clr4.x86.exe" />
     </ItemGroup>
-    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll" />
-    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll" />
+    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll /noshadow" />
+    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll /noshadow" />
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Test">
