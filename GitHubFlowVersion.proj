@@ -43,7 +43,7 @@
     <ItemGroup>
       <xUnit Include="$(Root)src\packages\xunit.runners.*\tools\xunit.console.clr4.exe" />
     </ItemGroup>
-    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll" />
+    <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll $(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll" />
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Build">
