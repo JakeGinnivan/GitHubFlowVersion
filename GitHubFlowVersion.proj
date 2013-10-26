@@ -42,7 +42,7 @@
 
   <Target Name="Test" DependsOnTargets="Build">
     <xunit Assembly="$(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll" ShadowCopy="False" />
-    <xunit Assembly"@(xUnit) $(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll" ShadowCopy="False" />
+    <xunit Assembly="$(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll" ShadowCopy="False" />
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Test">
