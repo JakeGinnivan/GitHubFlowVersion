@@ -46,7 +46,7 @@
     <Exec Command="@(xUnit) $(Root)src\GitHubFlowVersion.Tests\bin\$(Configuration)\GitHubFlowVersion.Tests.dll $(Root)src\GitHubFlowVersion.AcceptanceTests\bin\$(Configuration)\GitHubFlowVersion.AcceptanceTests.dll" />
   </Target>
 
-  <Target Name="Publish" DependsOnTargets="Build">
+  <Target Name="Publish" DependsOnTargets="Test">
     <ItemGroup>
       <BuildOutput Include="$(Root)src\GitHubFlowVersion\bin\$(Configuration)\**\*.*"/>
     </ItemGroup>
