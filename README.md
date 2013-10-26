@@ -69,7 +69,7 @@ Documentation about these variables is available at https://github.com/JakeGinni
 Just run `GitHubFlowVersion.exe` as the first step of your build, it will set the build number in teamcity to the FullSemVer
 then all the variables above will be available as `system` variables so they will automatically be passed to any build system you use.
 
-For the moment you need to promote the %teamcity.build.vcs.branch.{configurationid}% build parameter to an environment variable with the same name for pull requests to be handled correctly
+For the moment you need to promote the %teamcity.build.vcs.branch.{configurationid}% build parameter to an environment variable called `GitBranchName` for pull requests to be handled correctly
 
 ### 2. Environmental Variables through GitHubFlowVersion (In progress)
 The second option which will work for non-dotnet/msbuild/teamcity configurations is to use the `-Exec` or `-Project` switches

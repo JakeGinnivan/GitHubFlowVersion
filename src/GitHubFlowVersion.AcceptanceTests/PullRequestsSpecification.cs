@@ -30,7 +30,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndGivenAnEnvironmentalVariableWithPullRequestRefBranch()
         {
-            Environment.SetEnvironmentVariable("teamcity.build.vcs.branch.myvcsrootname", PullRequestBranchName());
+            Environment.SetEnvironmentVariable("GitBranchName", PullRequestBranchName());
         }
 
         public void WhenGitHubFlowVersionIsExecuted()

@@ -28,6 +28,7 @@ namespace GitHubFlowVersion.AcceptanceTests
         {
             // If we are actually running in teamcity, lets delete this environmental variable
             Environment.SetEnvironmentVariable("TEAMCITY_VERSION", null);
+            Environment.SetEnvironmentVariable("GitBranchName", null);
             this.BDDfy();
         }
 
