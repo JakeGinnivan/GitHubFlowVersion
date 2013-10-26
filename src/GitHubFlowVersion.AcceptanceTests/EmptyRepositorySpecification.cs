@@ -1,12 +1,11 @@
-﻿using System.Diagnostics;
-using GitHubFlowVersion.AcceptanceTests.Helpers;
+﻿using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 
 namespace GitHubFlowVersion.AcceptanceTests
 {
     public class EmptyRepositorySpecification : RepositorySpecification
     {
-        private Process _result;
+        private ExecutionResults _result;
 
         public void GivenAnEmptyRepository() {}
         
@@ -22,7 +21,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndAnErrorAboutNotFindingMasterShouldBeShown()
         {
-            Assert.Contains("Could not find branch 'master' in the repository", _result.StandardError.ReadToEnd());
+            Assert.Contains("Could not find branch 'master' in the repository", _result.Output);
         }
     }
 }

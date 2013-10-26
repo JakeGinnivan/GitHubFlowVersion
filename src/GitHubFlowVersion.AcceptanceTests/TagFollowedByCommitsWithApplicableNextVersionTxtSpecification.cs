@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 using TestStack.BDDfy;
@@ -9,7 +8,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 {
     public class TagFollowedByCommitsWithApplicableNextVersionTxtSpecification : RepositorySpecification
     {
-        private Process _result;
+        private ExecutionResults _result;
         private const string TaggedVersion = "1.0.3";
         private int _numCommitsToMake;
         private const string NextVersionTxtVersion = "1.1.0";
@@ -47,9 +46,8 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndTheCorrectVersionShouldBeOutput()
         {
-            var output = _result.StandardOutput.ReadToEnd();
-            output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
-            output.ShouldContainFourPartVersionVariable(ExpectedNextVersion, _numCommitsToMake);
+            _result.Output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
+            _result.Output.ShouldContainFourPartVersionVariable(ExpectedNextVersion, _numCommitsToMake);
         }
         [Theory]
         [InlineData(1)]

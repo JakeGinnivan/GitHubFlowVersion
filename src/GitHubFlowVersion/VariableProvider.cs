@@ -10,14 +10,14 @@ namespace GitHubFlowVersion
 
             return new Dictionary<string, string>
             {
-                {"GitHubFlowVersion.FullSemVer", nextBuildNumber.ToString()},
-                {"GitHubFlowVersion.SemVer", nextBuildNumber.WithBuildMetaData(null).ToString()},
-                {"GitHubFlowVersion.FourPartVersion", nextBuildNumber.ToVersion().ToString()},
-                {"GitHubFlowVersion.Major", nextBuildNumber.Major.ToString() },
-                {"GitHubFlowVersion.Minor", nextBuildNumber.Minor.ToString() },
-                {"GitHubFlowVersion.Patch", nextBuildNumber.Patch.ToString() },
-                {"GitHubFlowVersion.NumCommitsSinceRelease", numOfCommitsSinceRelease},
-                {"GitHubFlowVersion.Tag", nextBuildNumber.Suffix}
+                {"GitHubFlowVersion_FullSemVer", nextBuildNumber.ToString()},
+                {"GitHubFlowVersion_SemVer", nextBuildNumber.WithBuildMetaData(null).ToString()},
+                {"GitHubFlowVersion_FourPartVersion", nextBuildNumber.ToVersion().ToString()},
+                {"GitHubFlowVersion_Major", nextBuildNumber.Major.ToString() },
+                {"GitHubFlowVersion_Minor", nextBuildNumber.Minor.ToString() },
+                {"GitHubFlowVersion_Patch", nextBuildNumber.Patch.ToString() },
+                {"GitHubFlowVersion_NumCommitsSinceRelease", numOfCommitsSinceRelease},
+                {"GitHubFlowVersion_Tag", nextBuildNumber.Suffix}
             };
         }
     }

@@ -2,6 +2,6 @@
 {
     public interface INextVersionTxtFileFinder
     {
-        SemanticVersion GetNextVersion();
+        SemanticVersion GetNextVersion(SemanticVersion taggedVersion);
     }
 }

@@ -6,7 +6,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 {
     public class NoTagsInRepositorySpecification : RepositorySpecification
     {
-        private Process _result;
+        private ExecutionResults _result;
 
         public void GivenARepositoryWithCommitsButNoTags()
         {
@@ -26,7 +26,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndAnErrorAboutNotFindingTagShouldBeShown()
         {
-            Assert.Contains("Cant find last tagged version", _result.StandardError.ReadToEnd());
+            Assert.Contains("Cant find last tagged version", _result.Output);
         }
     }
 }

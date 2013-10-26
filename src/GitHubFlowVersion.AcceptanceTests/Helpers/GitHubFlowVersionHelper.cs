@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.IO;
+using System.Text;
 using LibGit2Sharp;
 using Xunit;
 
@@ -7,25 +8,32 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
 {
     public static class GitHubFlowVersionHelper
     {
-        public static Process ExecuteIn(string workingDirectory, string toFile = null)
+        public static ExecutionResults ExecuteIn(string workingDirectory, string toFile = null, 
+            string exec = null, string execArgs = null, string projectFile = null, string targets = null)
         {
             var gitHubFlowVersion = Path.Combine(PathHelper.GetCurrentDirectory(), "GitHubFlowVersion.exe");
-            string toFileArg = toFile == null ? null : string.Format(" -f \"{0}\"", toFile);
-            var startInfo = new ProcessStartInfo(gitHubFlowVersion)
-            {
-                WorkingDirectory = workingDirectory,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                ErrorDialog = false,
-                UseShellExecute = false,
-                Arguments = string.Format("-w \"{0}\"{1}", workingDirectory, toFileArg),
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            };
-            var process = ProcessHelper.Start(startInfo);
-            process.WaitForExit();
+            string toFileArg = toFile == null ? null : string.Format(" /ToFile \"{0}\"", toFile);
+            string execArg = exec == null ? null : string.Format(" /Exec \"{0}\"", exec);
+            string execArgsArg = execArgs == null ? null : string.Format(" /ExecArgs \"{0}\"", execArgs);
+            string projectFileArg = projectFile == null ? null : string.Format(" /ProjectFile \"{0}\"", projectFile);
+            string targetsArg = targets == null ? null : string.Format(" /Targets \"{0}\"", targets);
+            var arguments = string.Format("/w \"{0}\"{1}{2}{3}{4}{5}", workingDirectory, toFileArg, execArg, execArgsArg,
+                projectFileArg, targetsArg);
 
-            return process;
+            var output = new StringBuilder();
+
+            Console.WriteLine("Executing: {0} {1}", gitHubFlowVersion, arguments);
+            Console.WriteLine();
+            var exitCode = ProcessHelper.Run(s => output.AppendLine(s), s => output.AppendLine(s), null, gitHubFlowVersion, arguments, workingDirectory);
+
+            Console.WriteLine("Output from GitHubFlowVersion.exe");
+            Console.WriteLine("-------------------------------------------------------");
+            Console.WriteLine(output.ToString());
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("-------------------------------------------------------");
+
+            return new ExecutionResults(exitCode, output.ToString());
         }
 
         public static void ShouldContainCorrectBuildVersion(this string output, string version, int commitsSinceTag)
