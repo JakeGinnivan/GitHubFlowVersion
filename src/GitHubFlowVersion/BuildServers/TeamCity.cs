@@ -46,7 +46,7 @@ namespace GitHubFlowVersion.BuildServers
         {
             foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
             {
-                if (((string)de.Key).StartsWith("teamcity.build.vcs.branch.", StringComparison.InvariantCultureIgnoreCase))
+                if (((string)de.Key).StartsWith("GitBranchName", StringComparison.InvariantCultureIgnoreCase))
                 {
                     Console.WriteLine("Found Teamcity Branch: {0}", de.Value);
                     return (string)de.Value;
