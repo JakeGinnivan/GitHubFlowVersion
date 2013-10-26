@@ -64,6 +64,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="PullRequestsSpecification.cs" />
     <Compile Include="TagFollowedByCommitsWithApplicableNextVersionTxtSpecification.cs" />
     <Compile Include="TagFollowedByCommitsWithRedundantNextVersionTxtSpecification.cs" />
     <Compile Include="TagFollowedByCommitsWithNoNextVersionTxtSpecification.cs" />

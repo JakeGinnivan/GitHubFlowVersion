@@ -42,6 +42,13 @@ Pull requests are automatically tagged as pre-release, for example:
 
 `0.2.1-PullRequest25+003` where there has been 3 commits since the last release (this is because pull requests can be added to, so we need the build metadata to make sure build numbers are unique).
 
+Pull Requests work in:
+
+ - GitHub
+ - Stash
+
+BitBucket is not supported because of [https://bitbucket.org/site/master/issue/5814/reify-pull-requests-by-making-them-a-ref](https://bitbucket.org/site/master/issue/5814/reify-pull-requests-by-making-them-a-ref)
+
 #### Non-master branches
 Any other branches in your repo will use the branch name as a pre-release tag. For example if I create a branch called `beta`, then it will have a version `0.2.1-beta+003`.
 

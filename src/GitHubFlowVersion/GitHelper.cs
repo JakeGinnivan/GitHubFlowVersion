@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using LibGit2Sharp;
 
@@ -15,11 +14,6 @@ namespace GitHubFlowVersion
                 .Count();
         }
 
-        public bool IsPullRequest(Branch branch)
-        {
-            return branch.CanonicalName.Contains("/pull/") || TeamCity.IsBuildingAPullRequest();
-        }
-
         public Branch GetBranch(IRepository repository, string name)
         {
             var branch = repository.Branches.FirstOrDefault(b => b.Name == name);
@@ -29,7 +23,7 @@ namespace GitHubFlowVersion
 
                 if (!repository.Network.Remotes.Any())
                 {
-                    //Console.WriteLine("No remotes found");
+                    Console.WriteLine("No remotes found");
                 }
                 else
                 {

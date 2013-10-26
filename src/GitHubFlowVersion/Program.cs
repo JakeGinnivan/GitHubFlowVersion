@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using GitHubFlowVersion.BuildServers;
 using GitHubFlowVersion.OutputStrategies;
 using LibGit2Sharp;
 
@@ -55,11 +57,16 @@ namespace GitHubFlowVersion
 
         private static void Run(GitHubFlowArguments arguments, string workingDirectory)
         {
+            var fallbackStrategy = new LocalBuild();
+            var buildServers = new IBuildServer[] {new TeamCity()};
+            var currentBuildServer = buildServers.FirstOrDefault(s => s.IsRunningInBuildAgent()) ?? fallbackStrategy;
+
             var gitDirectory = GitDirFinder.TreeWalkForGitDir(workingDirectory);
             if (string.IsNullOrEmpty(gitDirectory))
             {
-                if (TeamCity.IsRunningInBuildAgent()) //fail the build if we're on a TC build agent
+                if (currentBuildServer.IsRunningInBuildAgent()) //fail the build if we're on a TC build agent
                 {
+                    // This exception might have to change when more build servers are added
                     throw new Exception("Failed to find .git directory on agent. " +
                                         "Please make sure agent checkout mode is enabled for you VCS roots - " +
                                         "http://confluence.jetbrains.com/display/TCD8/VCS+Checkout+Mode");
@@ -77,19 +84,19 @@ namespace GitHubFlowVersion
             var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(repositoryRoot),
                 lastTaggedReleaseFinder);
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper,
-                gitRepo);
+                gitRepo, currentBuildServer);
 
             var nextBuildNumber = buildNumberCalculator.GetBuildNumber();
-            WriteResults(arguments, nextBuildNumber);
+            WriteResults(arguments, nextBuildNumber, currentBuildServer);
         }
 
-        private static void WriteResults(GitHubFlowArguments arguments, SemanticVersion nextBuildNumber)
+        private static void WriteResults(GitHubFlowArguments arguments, SemanticVersion nextBuildNumber, IBuildServer currentBuildServer)
         {
             var variableProvider = new VariableProvider();
             var variables = variableProvider.GetVariables(nextBuildNumber);
             var outputStrategies = new IOutputStrategy[]
             {
-                new TeamCityOutputStrategy(),
+                new BuildServerOutputStrategy(currentBuildServer),
                 new JsonFileOutputStrategy(),
                 new EnvironmentalVariablesOutputStrategy()
             };

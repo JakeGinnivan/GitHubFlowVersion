@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 
-namespace GitHubFlowVersion
+namespace GitHubFlowVersion.BuildServers
 {
-    public class TeamCity
+    public class TeamCity : IBuildServer
     {
-        public static bool IsRunningInBuildAgent()
+        public bool IsRunningInBuildAgent()
         {
             var isRunningInBuildAgent = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
             if (isRunningInBuildAgent)
@@ -15,10 +15,11 @@ namespace GitHubFlowVersion
             return isRunningInBuildAgent;
         }
 
-        public static bool IsBuildingAPullRequest()
+        public bool IsBuildingAPullRequest()
         {
             var branchInfo = GetBranchEnvironmentVariable();
-            var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) && branchInfo.ToLower().Contains("/pull/");
+            var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) &&
+                (branchInfo.ToLower().Contains("/pull/") || branchInfo.ToLower().Contains("/pull-requests/"));
             if (isBuildingAPullRequest)
             {
                 Console.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo());
@@ -26,8 +27,22 @@ namespace GitHubFlowVersion
             return isBuildingAPullRequest;
         }
 
+        public int CurrentPullRequestNo()
+        {
+            return int.Parse(GetBranchEnvironmentVariable().Split('/')[2]);
+        }
 
-        static string GetBranchEnvironmentVariable()
+        public void WriteBuildNumber(SemanticVersion nextBuildNumber)
+        {
+            TeamCityVersionWriter.WriteBuildNumber(nextBuildNumber);
+        }
+
+        public void WriteParameter(string variableName, string value)
+        {
+            TeamCityVersionWriter.WriteParameter(variableName.Replace('_', '.'), value);
+        }
+
+        string GetBranchEnvironmentVariable()
         {
             foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
             {
@@ -39,11 +54,6 @@ namespace GitHubFlowVersion
             }
 
             return null;
-        }
-
-        public static int CurrentPullRequestNo()
-        {
-            return int.Parse(GetBranchEnvironmentVariable().Split('/')[2]);
         }
     }
 }

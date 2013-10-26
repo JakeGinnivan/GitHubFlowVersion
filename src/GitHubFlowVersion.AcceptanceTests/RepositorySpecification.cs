@@ -31,6 +31,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void Dispose()
         {
+            Cleanup();
             Repository.Dispose();
             try
             {
@@ -41,5 +42,7 @@ namespace GitHubFlowVersion.AcceptanceTests
                 Console.WriteLine("Failed to clean up repository path at {0}. Received exception: {1}", RepositoryPath, e.Message);
             }
         }
+
+        protected virtual void Cleanup(){}
     }
 }

@@ -48,6 +48,7 @@ namespace GitHubFlowVersion.AcceptanceTests
             _result.Output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
             _result.Output.ShouldContainFourPartVersionVariable(ExpectedNextVersion, _numCommitsToMake);
         }
+
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
