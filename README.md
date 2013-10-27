@@ -8,6 +8,8 @@ I decided not to fork because this project will be potentially a lot simpler (ho
 
 If you use GitFlow I highly suggest you check out GitFlowVersion, it is a really great idea
 
+Install from https://www.nuget.org/packages/GitHubFlowVersion/ or download from https://github.com/JakeGinnivan/GitHubFlowVersion/releases
+
 ### How GitHubFlowVersion works
 
 If you don't know what GitHub flow is, there is a good write up on http://scottchacon.com/2011/08/31/github-flow.html
