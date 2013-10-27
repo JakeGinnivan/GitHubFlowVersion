@@ -50,7 +50,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         protected override void Cleanup()
         {
-            Environment.SetEnvironmentVariable("teamcity.build.vcs.branch.myvcsrootname", null);
+            Environment.SetEnvironmentVariable("GitBranchName", null);
         }
 
         public class StashPullRequests : PullRequestsSpecification

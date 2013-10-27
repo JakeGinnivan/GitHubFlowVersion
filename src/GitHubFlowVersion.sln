@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{827CC70E-BBB5-465C-83D5-7DE98E999E4E}"
 	ProjectSection(SolutionItems) = preProject
 		..\Build.cmd = ..\Build.cmd
+		..\GitHubFlowVersion.nuspec = ..\GitHubFlowVersion.nuspec
 		..\GitHubFlowVersion.proj = ..\GitHubFlowVersion.proj
 		..\LICENSE = ..\LICENSE
 		..\NextVersion.txt = ..\NextVersion.txt
