@@ -10,6 +10,8 @@ If you use GitFlow I highly suggest you check out GitFlowVersion, it is a really
 
 Install from https://www.nuget.org/packages/GitHubFlowVersion/ or download from https://github.com/JakeGinnivan/GitHubFlowVersion/releases
 
+We are also starting a project for the next step, releasing the properly versioned files. Get involved at https://github.com/JakeGinnivan/GitHubReleaser
+
 ### How GitHubFlowVersion works
 
 If you don't know what GitHub flow is, there is a good write up on http://scottchacon.com/2011/08/31/github-flow.html
