@@ -5,7 +5,7 @@ The easy way to use semantic versioning (semver.org) with GitHub Flow
 
 GitHubFlowVersion is an exe which versions your software through a few simple conventions
 
- - Current version being build is {vLast.Major}.{vLast.Minor}.{vLast.Patch+1}
+ - Current version being build is `{vLast.Major}.{vLast.Minor}.{vLast.Patch+1}`
  - If you want to bump Major or Minor due to breaking changes, simply update `NextVersion.txt` which lives in the repository root
  - A bunch of variables are written out to TeamCity, for you to use in your build (variables like SemVer, AssemblyVersion, Major, Minor and a bunch of others)
  - Or GitHubFlowVersion can execute your build, making a bunch of environmental variables available
@@ -15,7 +15,7 @@ If you use TeamCity, just call GitHubFlowVersion as your first build step. Also 
 GitHubFlowVersion builds itself, then uses what it has just built to version itselfs. This means it is constantly being dogfooded and can be used as an example on how it can be used. Checkout the CI builds at [GitHubFlowVersion's TeamCity Server](http://teamcity.ginnivan.net/project.html?projectId=OpenSourceProjects_GitHubFlowVersion&branch_OpenSourceProjects_GitHubFlowVersion=__all_branches__)
 
 
-
+### History
 The idea and a bit of the code is from [https://github.com/Particular/GitFlowVersion](https://github.com/Particular/GitFlowVersion).  
 I decided not to fork because this project will be potentially a lot simpler (hopefully)
 
