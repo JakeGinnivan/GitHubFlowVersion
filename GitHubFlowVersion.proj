@@ -33,10 +33,10 @@
     <FileUpdate Files="$(Root)src\GitHubFlowVersion\Properties\AssemblyInfo.cs"
                 Multiline="true" Singleline="false"
                 Regex="AssemblyVersion\(&quot;(\d+)\.(\d+)\.(\d+)\.(\d+)"
-                ReplacementText="AssemblyVersion(&quot;$(GitHubFlowVersion_AssemblySemVer).0" />
+                ReplacementText="AssemblyVersion(&quot;$(GitHubFlowVersion_AssemblySemVer)" />
     <FileUpdate Files="$(Root)src\GitHubFlowVersion\Properties\AssemblyInfo.cs"
                 Regex="AssemblyFileVersion\(&quot;(\d+)\.(\d+)\.(\d+)\.(\d+)"
-                ReplacementText="AssemblyFileVersion(&quot;$(GitHubFlowVersion_AssemblySemVer).0" />
+                ReplacementText="AssemblyFileVersion(&quot;$(GitHubFlowVersion_AssemblySemVer)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="Version">
