@@ -43,7 +43,7 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
 
         public static void ShouldContainFourPartVersionVariable(this string output, string version, int numCommitsToMake)
         {
-            Assert.Contains(string.Format("##teamcity[setParameter name='GitHubFlowVersion.FourPartVersion' value='{0}.{1}']", version, numCommitsToMake), output);
+            Assert.Contains(string.Format("##teamcity[setParameter name='system.GitHubFlowVersion.FourPartVersion' value='{0}.{1}']", version, numCommitsToMake), output);
         }
 
         public static void AddNextVersionTxtFile(this IRepository repository, string version)
