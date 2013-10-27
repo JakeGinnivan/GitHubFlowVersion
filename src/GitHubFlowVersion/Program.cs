@@ -38,9 +38,11 @@ namespace GitHubFlowVersion
             {
                 var targetsArg = arguments.Targets == null ? null : " /target:" + arguments.Targets;
                 Console.WriteLine("Launching {0} {1}{2}", MsBuild, arguments.ProjectFile, targetsArg);
-                ProcessHelper.Run(
+                var results = ProcessHelper.Run(
                     Console.WriteLine, Console.Error.WriteLine,
                     null, MsBuild, arguments.ProjectFile + targetsArg, workingDirectory);
+                if (results != 0)
+                    throw new Exception("MsBuild execution failed, non-zero return code");
             }
         }
 
@@ -49,9 +51,11 @@ namespace GitHubFlowVersion
             if (!string.IsNullOrEmpty(arguments.Exec))
             {
                 Console.WriteLine("Launching {0} {1}", arguments.Exec, arguments.ExecArgs);
-                ProcessHelper.Run(
+                var results = ProcessHelper.Run(
                     Console.WriteLine, Console.Error.WriteLine,
                     null, arguments.Exec, arguments.ExecArgs, workingDirectory);
+                if (results != 0)
+                    throw new Exception("MsBuild execution failed, non-zero return code");
             }
         }
 

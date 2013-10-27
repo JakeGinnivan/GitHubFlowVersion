@@ -12,6 +12,7 @@ namespace GitHubFlowVersion
             {
                 {"GitHubFlowVersion_FullSemVer", nextBuildNumber.ToString()},
                 {"GitHubFlowVersion_SemVer", nextBuildNumber.WithBuildMetaData(null).ToString()},
+                {"GitHubFlowVersion_AssemblySemVer", nextBuildNumber.WithSuffix(null).WithBuildMetaData(null).ToString()},
                 {"GitHubFlowVersion_FourPartVersion", nextBuildNumber.ToVersion().ToString()},
                 {"GitHubFlowVersion_Major", nextBuildNumber.Major.ToString() },
                 {"GitHubFlowVersion_Minor", nextBuildNumber.Minor.ToString() },
