@@ -3,10 +3,23 @@ GitHubFlowVersion
 
 The easy way to use semantic versioning (semver.org) with GitHub Flow
 
-The idea and a lot of the heavy lifting code is from [https://github.com/Particular/GitFlowVersion](https://github.com/Particular/GitFlowVersion).  
+GitHubFlowVersion is an exe which versions your software through a few simple conventions
+
+ - Current version being build is {vLast.Major}.{vLast.Minor}.{vLast.Patch+1}
+ - If you want to bump Major or Minor due to breaking changes, simply update `NextVersion.txt` which lives in the repository root
+ - A bunch of variables are written out to TeamCity, for you to use in your build (variables like SemVer, AssemblyVersion, Major, Minor and a bunch of others)
+ - Or GitHubFlowVersion can execute your build, making a bunch of environmental variables available
+
+If you use TeamCity, just call GitHubFlowVersion as your first build step. Also check out [GitHubFlowVersion's Build Script](https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/GitHubFlowVersion.proj) for examples on how it can work locally.
+
+GitHubFlowVersion builds itself, then uses what it has just built to version itselfs. This means it is constantly being dogfooded and can be used as an example on how it can be used. Checkout the CI builds at [GitHubFlowVersion's TeamCity Server](http://teamcity.ginnivan.net/project.html?projectId=OpenSourceProjects_GitHubFlowVersion&branch_OpenSourceProjects_GitHubFlowVersion=__all_branches__)
+
+
+
+The idea and a bit of the code is from [https://github.com/Particular/GitFlowVersion](https://github.com/Particular/GitFlowVersion).  
 I decided not to fork because this project will be potentially a lot simpler (hopefully)
 
-If you use GitFlow I highly suggest you check out GitFlowVersion, it is a really great idea
+If you use GitFlow I highly suggest you check out GitFlowVersion, it is a really great idea. This project was born because I prefer GitHub Flow over GitFlow for my open source projects.
 
 Install from https://www.nuget.org/packages/GitHubFlowVersion/ or download from https://github.com/JakeGinnivan/GitHubFlowVersion/releases
 
