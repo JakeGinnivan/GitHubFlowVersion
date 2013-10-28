@@ -1,106 +1,154 @@
 GitHubFlowVersion
 =================
 
-The easy way to use semantic versioning (semver.org) with GitHub Flow
+The easy way to use semantic versioning (semver.org) with a GitHub Flow or trunk/mainline development Git workflow.
 
-GitHubFlowVersion is an exe which versions your software through a few simple conventions
+It supports using any Git repository as long as you are using master and furthermore, it supports detection of Pull Requests if you are using:
+
+* GitHub
+* Stash
+
+GitHubFlowVersion is an exe which versions your software through a few simple conventions:
 
  - Current version being build is `{vLast.Major}.{vLast.Minor}.{vLast.Patch+1}`
- - If you want to bump Major or Minor due to breaking changes, simply update `NextVersion.txt` which lives in the repository root
- - A bunch of variables are written out to TeamCity, for you to use in your build (variables like SemVer, AssemblyVersion, Major, Minor and a bunch of others)
- - Or GitHubFlowVersion can execute your build, making a bunch of environmental variables available
+ - If you want to bump Major or Minor due to changes that are more involved than a patch simply update `NextVersion.txt` which lives in the repository root
+ - A bunch of variables are written out to TeamCity for you to use in your build as documented below or, alternatively, GitHubFlowVersion can execute your build scripts making a bunch of environmental variables available (as documented below)
 
-If you use TeamCity, just call GitHubFlowVersion as your first build step. Also check out [GitHubFlowVersion's Build Script](https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/GitHubFlowVersion.proj) for examples on how it can work locally.
+See below for full usage instructions.
 
-GitHubFlowVersion builds itself, then uses what it has just built to version itselfs. This means it is constantly being dogfooded and can be used as an example on how it can be used. Checkout the CI builds at [GitHubFlowVersion's TeamCity Server](http://teamcity.ginnivan.net/project.html?projectId=OpenSourceProjects_GitHubFlowVersion&branch_OpenSourceProjects_GitHubFlowVersion=__all_branches__)
+GitHubFlowVersion works best if you are using TeamCity (but that's not a requirement) and while it was designed with .NET projects in mind, it can be used for any project type you like as long as you are running it in Windows.
 
+You can install it from https://www.nuget.org/packages/GitHubFlowVersion/ using NuGet or download the compiled executable from https://github.com/JakeGinnivan/GitHubFlowVersion/releases.
+
+We are also starting a project for the next step: releasing the properly versioned files. Get involved at https://github.com/JakeGinnivan/GitHubReleaser.
+
+GitHubFlowVersion builds itself, then uses what it has just built to version itself. This means it is constantly being dogfooded and can be used as an example on how it can be used. Check out the CI builds at [GitHubFlowVersion's TeamCity Server](http://teamcity.ginnivan.net/project.html?projectId=OpenSourceProjects_GitHubFlowVersion&branch_OpenSourceProjects_GitHubFlowVersion=__all_branches__).
 
 ### History
 The idea and a bit of the code is from [https://github.com/Particular/GitFlowVersion](https://github.com/Particular/GitFlowVersion).  
-I decided not to fork because this project will be potentially a lot simpler (hopefully)
+I decided not to fork because this project is a lot simpler. If you use GitFlow I highly suggest you check out GitFlowVersion, it is a really great idea.
 
-If you use GitFlow I highly suggest you check out GitFlowVersion, it is a really great idea. This project was born because I prefer GitHub Flow over GitFlow for my open source projects.
-
-Install from https://www.nuget.org/packages/GitHubFlowVersion/ or download from https://github.com/JakeGinnivan/GitHubFlowVersion/releases
-
-We are also starting a project for the next step, releasing the properly versioned files. Get involved at https://github.com/JakeGinnivan/GitHubReleaser
+This project was born because I prefer GitHub Flow over GitFlow for my open source projects.
 
 ### How GitHubFlowVersion works
 
-If you don't know what GitHub flow is, there is a good write up on http://scottchacon.com/2011/08/31/github-flow.html
+If you don't know what GitHub Flow is there is a good write up at http://scottchacon.com/2011/08/31/github-flow.html.
 
-But in a nutshell, GitHub flow is: you fork the main repository, then clone your fork. Locally you branch from master, do your work, push your feature branch to your fork, then submit a pull request.  
+In a nutshell though, GitHub Flow involves the following steps:
 
+* Fork the main repository
+* Clone your fork
+* Locally you branch from master
+* Commit your work
+* Push your branch to your fork
+* Submit a pull request from your fork's branch to master of the main repository
 
-GitHubFlowVersion simply requires you to tag master when you release (Known as **vLast**), and a NextVersion.txt file to control your versions using the following simple rules
+GitHubFlowVersion simply requires you to tag master when you release (known as **vLast** throughout the rest of this document), and add a `NextVersion.txt` file to control your versions using the following simple rules:
 
- - If `NextVersion.txt` is a lower or the same SemVer as vLast, the build version will be `{vLast.Major}.{vLast.Minor}.{vLast.Patch+1}`
-   - This means you don't have to update the NextVersion.txt file when you release, you can bump it whenever you need to
- - If `NextVersion.txt` is a higher SemVer to the last tag the version in `NextVersion.txt` is used
+ * If `NextVersion.txt` is a lower or the same SemVer as vLast, the build SemVer will be `{vLast.Major}.{vLast.Minor}.{vLast.Patch+1}`
+   * This means you don't have to update the `NextVersion.txt` file when you release, but you can bump it whenever you need to  increase by more than a patch
+ * If `NextVersion.txt` is a higher SemVer to the last tag the version in `NextVersion.txt` is used
 
-This solves the major SemVer issues, but now we need to be able to version all our builds with a unique version, read the next section for the rest of the details
+This solves the major SemVer issue of tying the SemVer to your code without having to constantly change a file. This SemVer (known as **NextSemVer** throughout the rest of this document) won't change between multiple commits to the branch though (until you either release and tag the branch or change the `NextVerison.txt` file), but we need to be able to version all our builds with a unique version. The approach GitHubFlowVersion uses to solve this is described in the next section.
 
 ### Versioning Conventions
-All builds on the same branch as the last SemVer tag (vLast) will have the format:
+All builds on the same branch as the last vLast will have the format:
 
-    {semver}+{commitsSinceLastRelease}
+    {NextSemVer}+{commitsSince_vLast}
 
-For example, I tag a release 0.2.0 (so the tag is on the HEAD of master), then I merge a pull request with 2 commits, the build number will be:  
-`0.2.1+003`
+For example, if I tag a release 0.2.0 (so the tag is on the HEAD of master) and I merge a pull request with 2 commits then the build number will be: `0.2.1+003`.
 
-The build metadata (+003) has no semantic meaning in SemVer, so version `0.2.1+003` == `0.2.1+100`, this is good for releases because you can commit multiple times producing the same semantic version, but a different build number.
+This convention gives you a number of advantages:
 
-This is bad for CI (exposing say a TeamCity NuGet feed) because each build is the same version, so you will not be able to just upgrade between CI Builds.
+* You can use continuous delivery with the trigger of a version bump being after the build (say when you decide to promote to production) without having to re-build the software (thus following the principle of compiling once and using that result throughout the rest of the deployment pipeline).
+    * This is because the build metadata has no semantic meaning so `0.2.1+003` is the same semantic version as `0.2.1+234` - thus you can decide to deploy the software at any time and your semantic version number will have increased by one increment only (thus conforming to SemVer rules)
+* You have a unique build identifier for every push to master
+* You are not relying on the CI server to generate your unique identifier - you can completely rebuild the CI server and point it at a commit and it will generate the same build identifier (i.e. it's idempotent)
+* All versioning information is kept in source control
+* You get an indication of how long it has been since you last released (in terms of number of commits), which provides a handy hint to encourage you to release more often (when the number gets higher your confidence level about whether there is a bug in the release decreases)
 
-If you need this, the `GitHubFlowVersion.FourPartVersionNumber` variable is available, which will produce `0.2.1.3` instead of `0.2.1+003`. 
+For situations where you need a four part version number there is a four part variable exposed by GitHubFlowVersion that uses the number of commits as a fourth number rather than metadata, e.g. `0.2.1.3` - see below for the variable name.
 
 #### Pull Requests
-Pull requests are automatically tagged as pre-release, for example:
+If you are using GitHub or Stash then pull requests will be automatically tagged with a pre-release identifier. BitBucket is not supported because of [https://bitbucket.org/site/master/issue/5814/reify-pull-requests-by-making-them-a-ref](https://bitbucket.org/site/master/issue/5814/reify-pull-requests-by-making-them-a-ref).
 
-`0.2.1-PullRequest25+003` where there has been 3 commits since the last release (this is because pull requests can be added to, so we need the build metadata to make sure build numbers are unique).
+For example: If you have a pull request that branched away from master after a tag of `0.2.0` and there has been 3 commits since that release and the pull request number in the repository is 25 then the build identifier `0.2.1-PullRequest25+003`.
 
-Pull Requests work in:
-
- - GitHub
- - Stash
-
-BitBucket is not supported because of [https://bitbucket.org/site/master/issue/5814/reify-pull-requests-by-making-them-a-ref](https://bitbucket.org/site/master/issue/5814/reify-pull-requests-by-making-them-a-ref)
+The number of commits since the last release is added to the build metadata here because you can push further commits to the pull request so this is important to keep the build identifiers unique.
 
 #### Non-master branches
-Any other branches in your repo will use the branch name as a pre-release tag. For example if I create a branch called `beta`, then it will have a version `0.2.1-beta+003`.
+Any other branches in your repository will use the branch name as a pre-release tag. For example if you create a branch called `beta`, then it will have a version `0.2.1-beta+003` if it was branched from a point where master has a tag of `0.2.0` and there has been 3 commits since.
 
 This allows you to have short lived branches for a pre-release, improve it. Then merge it back into master when you are done, then release the final build.
 
 ## How to use it
-GitHubFlow version at the moment is designed to work with TeamCity and be as simple as possible, so it is an exe and writes the build number out to TeamCity.
 
-There are a few ways to use GitHubFlowVersion, all involve making a bunch of variables available to you. They are
+There is two main approaches to use GitHubFlowVersion - TeamCity and Local Builds.
 
-GitHubFlowVersion.FullSemVer, GitHubFlowVersion.SemVer, GitHubFlowVersion.FourPartVersion  
-GitHubFlowVersion.Major, GitHubFlowVersion.Minor, GitHubFlowVersion.Patch  
-GitHubFlowVersion.NumCommitsSinceRelease, GitHubFlowVersion.Tag
-
-Documentation about these variables is available at https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/src/GitHubFlowVersion.Tests/VariableProviderTests.cs (the variable provider test)
-
-### 1. Through TeamCity
-Just run `GitHubFlowVersion.exe` as the first step of your build, it will set the build number in teamcity to the FullSemVer
+### TeamCity
+Simply run `GitHubFlowVersion.exe` as the first step of your build and it will set the `%build.number%` variable in TeamCity to the `FullSemVer` (see below).
 then all the variables above will be available as `system` variables so they will automatically be passed to any build system you use.
+Calling GitHubFlowVersion.exe from TeamCity will cause a bunch of system variables to be created in TeamCity (as specified below)and it will also override the `%build.number%`.
 
-For the moment you need to promote the %teamcity.build.vcs.branch.{configurationid}% build parameter to an environment variable called `GitBranchName` for pull requests to be handled correctly
+**For the moment you need to promote the `%teamcity.build.vcs.branch.{configurationid}%` build parameter to an environment variable called `env.GitBranchName` for pull request detection to work.**
 
-### 2. Environmental Variables through GitHubFlowVersion (In progress)
-The second option which will work for non-dotnet/msbuild/teamcity configurations is to use the `-Exec` or `-Project` switches
+### Local Builds (or other build servers)
+To make all the variables available, GitHubFlowVersion has to call your build scripts. We support MSBuild or any arbitrary executable (including non-.NET applications) via the `ProjectFile` and `Exec` commandline options respectively:
 
-#### -Exec
-This will set the above variables as process level environmental variables, then will run the command line (exec) or the msbuild project file (-Project).
+        GitHubFlowVersion.exe /ProjectFile MyMSBuildProject.proj /Targets Build;Package
+        GitHubFlowVersion.exe /Exec rake.exe /ExecArgs "scripts/build" (you don't have to call MSBuild - this is just a convenient example)
 
-GitHubFlowVersion has to be the one which executes your build system because process level environmental variabes will not be available to the parent process, but they will be available to child proccesses.
+The variables will be available to your build as Environmental Variables (as specified below).
 
+See [GitHubFlowVersion's Build Script](https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/GitHubFlowVersion.proj) for examples on how it can be used in an MSBuild file.
+
+GitHubFlowVersion has to be the one which executes your build system because process level environmental variables will not be available to the parent process, but they will be available to child processes.
+
+### Available Variables
+
+**Note:** The variable names will have the `_` replaced with a `.` in TeamCity.
+
+* Without tag (on master)
+    * GitHubFlowVersion_FullSemVer (e.g. `1.2.3+004`)
+    * GitHubFlowVersion_SemVer (e.g. `1.2.3`)
+    * GitHubFlowVersion_AssemblySemVer (e.g. `1.2.3.0`)
+    * GitHubFlowVersion_FourPartVersion (e.g. `1.2.3.4`)
+    * GitHubFlowVersion_NumCommitsSinceRelease (e.g. `4`)
+    * GitHubFlowVersion_Major (e.g. `1`)
+    * GitHubFlowVersion_Minor (e.g. `2`)
+    * GitHubFlowVersion_Patch (e.g. `3`)
+    * GitHubFlowVersion_NumCommitsSinceRelease (e.g. `4`)
+    * GitHubFlowVersion_Tag (e.g. ``)
+* With tag (on a branch)
+    * GitHubFlowVersion_FullSemVer (e.g. `1.2.3-alpha+004`)
+    * GitHubFlowVersion_SemVer (e.g. `1.2.3-alpha`)
+    * GitHubFlowVersion_AssemblySemVer (e.g. `1.2.3.0`)
+    * GitHubFlowVersion_FourPartVersion (e.g. `1.2.3.4`)
+    * GitHubFlowVersion_NumCommitsSinceRelease (e.g. `4`)
+    * GitHubFlowVersion_Major (e.g. `1`)
+    * GitHubFlowVersion_Minor (e.g. `2`)
+    * GitHubFlowVersion_Patch (e.g. `3`)
+    * GitHubFlowVersion_NumCommitsSinceRelease (e.g. `4`)
+    * GitHubFlowVersion_Tag (e.g. `alpha`)
+* With tag (on a pull request branch)
+    * GitHubFlowVersion_FullSemVer (e.g. `1.2.3-PullRequest20+004`)
+    * GitHubFlowVersion_SemVer (e.g. `1.2.3-PullRequest20`)
+    * GitHubFlowVersion_AssemblySemVer (e.g. `1.2.3.0`)
+    * GitHubFlowVersion_FourPartVersion (e.g. `1.2.3.4`)
+    * GitHubFlowVersion_NumCommitsSinceRelease (e.g. `4`)
+    * GitHubFlowVersion_Major (e.g. `1`)
+    * GitHubFlowVersion_Minor (e.g. `2`)
+    * GitHubFlowVersion_Patch (e.g. `3`)
+    * GitHubFlowVersion_NumCommitsSinceRelease (e.g. `4`)
+    * GitHubFlowVersion_Tag (e.g. `PullRequest20`)
+
+Further documentation about these variables is available at https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/src/GitHubFlowVersion.Tests/VariableProviderTests.cs (the variable provider test).
 
 ### How do I patch assembly info?
-I would suggest using [https://github.com/loresoft/msbuildtasks](https://github.com/loresoft/msbuildtasks) in your MSBuild script, a sample is available at [https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj](https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj)
+I would suggest using [https://github.com/loresoft/msbuildtasks](https://github.com/loresoft/msbuildtasks) in your MSBuild script, a sample is available at [https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj](https://github.com/loresoft/msbuildtasks/blob/master/Source/Sample.proj) or you can see how it's been done for [GitHubFlowVersion](https://github.com/JakeGinnivan/GitHubFlowVersion/blob/master/GitHubFlowVersion.proj#L32).
 
-If you would like built in AssemblyInfo patching support, raise an issue, lets discuss the best way to do it.
+If you would like built in AssemblyInfo patching support please discuss it in the [relevant issue](https://github.com/JakeGinnivan/GitHubFlowVersion/issues/23).
 
-## Summary
-As you can see, this is a really simple workflow, very easy to get started.
+## Contributions / Issues / Questions
+
+Feedback, contributions, bug reports and questions are more than welcome, please raise issues/suggestions at: https://github.com/JakeGinnivan/GitHubFlowVersion/issues or contact [Jake Ginnivan](https://twitter.com/jakeginnivan), [Robert Moore](https://twitter.com/robdmoore) or [Matt Davies](https://twitter.com/mdaviesnet) on Twitter.
