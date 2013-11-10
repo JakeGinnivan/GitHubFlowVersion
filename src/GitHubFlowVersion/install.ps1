@@ -4,7 +4,6 @@ $ErrorActionPreference = "Stop"
 
 if ($project -ne $null)
 {
-    $projectFolder = (get-item $project.FullName).Directory.FullName
     Foreach ($item in $project.ProjectItems)
     {
         if ($item.Name -eq "ToBeRemoved.txt")
@@ -37,7 +36,7 @@ if ($gitDir -ne $null)
     Write-Host "Found git directory for project at $gitDir"
     $repositoryDir = (get-item $gitDir -Force).Parent.FullName
     $gitHubFlowToolsDir = Join-Path $repositoryDir "tools\GitHubFlowVersion"
-    if (Test-Path $gitHubFlowToolsDir -PathType Container)
+    if ((Test-Path $gitHubFlowToolsDir -PathType Container) -eq $false)
     {
         Write-Host "Creating directory $gitHubFlowToolsDir"
     }
