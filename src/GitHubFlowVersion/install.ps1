@@ -15,7 +15,7 @@ if ($project -ne $null)
 
 $gitDir = $null
 $workingDirectory = Get-Item $project.FullName
-Write-Host "Looking for .git directory, starting in $workingDirectory.FullName"
+Write-Host "Looking for .git directory, starting in $workingDirectory"
 while ($true)
 {
     $possibleGitDir = Join-Path $workingDirectory.FullName ".git"
