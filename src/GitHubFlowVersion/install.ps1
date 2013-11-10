@@ -2,13 +2,16 @@
 
 $ErrorActionPreference = "Stop"
 
-$projectFolder = (get-item $project.FullName).Directory.FullName
-$fileToRemove = Join-Path $projectFolder "ToBeRemoved.txt"
-
-If (Test-Path $fileToRemove)
+if ($project -ne null)
 {
-    Write-Host "Deleting temporary file $fileToRemove"
-    Remove-Item $fileToRemove
+    $projectFolder = (get-item $project.FullName).Directory.FullName
+    Foreach ($item in $project.ProjectItems) 
+    {
+        if ($item.Name -eq "ToBeRemoved.txt")
+        {
+            $item.Delete()
+        }
+    }
 }
 
 $gitDir = $null
@@ -21,7 +24,7 @@ while ($true)
         $gitDir = $possibleGitDir
         Break
     }
-    $parent = $workingDirectory.parent
+    $parent = $workingDirectory.Parent
     if ($parent -eq $null)
     {
         Break
@@ -32,8 +35,8 @@ while ($true)
 if ($gitDir -ne $null)
 {
     Write-Host "Found git directory for project at $gitDir"
-    $solutionDir = (get-item $gitDir -Force).Parent.FullName
-    $gitHubFlowToolsDir = Join-Path $solutionDir "tools\GitHubFlowVersion"
+    $repositoryDir = (get-item $gitDir -Force).Parent.FullName
+    $gitHubFlowToolsDir = Join-Path $repositoryDir "tools\GitHubFlowVersion"
     if (Test-Path $gitHubFlowToolsDir -PathType Container)
     {
         Write-Host "Creating directory $gitHubFlowToolsDir"
@@ -41,4 +44,8 @@ if ($gitDir -ne $null)
     
     Write-Host "GitHubFlowVersion tools installed to $gitHubFlowToolsDir"
     Copy-Item $toolsPath –destination $gitHubFlowToolsDir -recurse -container -force
+}
+else
+{
+    Write-Host "Cannot find git directory"
 }
