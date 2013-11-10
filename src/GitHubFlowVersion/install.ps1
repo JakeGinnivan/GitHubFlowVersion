@@ -19,7 +19,7 @@ Write-Host "Looking for .git directory, starting in $workingDirectory.FullName"
 while ($true)
 {
     $possibleGitDir = Join-Path $workingDirectory.FullName ".git"
-    if (Test-Path $possibleGitDir -Force)
+    if (Test-Path $possibleGitDir)
     {
         $gitDir = $possibleGitDir
         Break
