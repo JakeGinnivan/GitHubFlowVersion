@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NoTagsInRepositoryWithNextVersionTxtSpecification.cs" />
     <Compile Include="ProjArgSpecification.cs" />
     <Compile Include="Helpers\ExecutionResults.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
