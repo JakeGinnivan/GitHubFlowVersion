@@ -2,10 +2,10 @@
 
 $ErrorActionPreference = "Stop"
 
-if ($project -ne null)
+if ($project -ne $null)
 {
     $projectFolder = (get-item $project.FullName).Directory.FullName
-    Foreach ($item in $project.ProjectItems) 
+    Foreach ($item in $project.ProjectItems)
     {
         if ($item.Name -eq "ToBeRemoved.txt")
         {
