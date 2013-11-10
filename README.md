@@ -48,6 +48,7 @@ GitHubFlowVersion simply requires you to tag master when you release (known as *
  * If `NextVersion.txt` is a lower or the same SemVer as vLast, the build SemVer will be `{vLast.Major}.{vLast.Minor}.{vLast.Patch+1}`
    * This means you don't have to update the `NextVersion.txt` file when you release, but you can bump it whenever you need to  increase by more than a patch
  * If `NextVersion.txt` is a higher SemVer to the last tag the version in `NextVersion.txt` is used
+ * If you have not ever created a tag (new project), GitHubFlowVersion will create the `NextVersion.txt` for you at v0.1.0
 
 This solves the major SemVer issue of tying the SemVer to your code without having to constantly change a file. This SemVer (known as **NextSemVer** throughout the rest of this document) won't change between multiple commits to the branch though (until you either release and tag the branch or change the `NextVerison.txt` file), but we need to be able to version all our builds with a unique version. The approach GitHubFlowVersion uses to solve this is described in the next section.
 

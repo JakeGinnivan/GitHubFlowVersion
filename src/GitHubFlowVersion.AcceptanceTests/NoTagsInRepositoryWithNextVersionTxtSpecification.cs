@@ -4,8 +4,9 @@ using Xunit;
 
 namespace GitHubFlowVersion.AcceptanceTests
 {
-    public class NoTagsInRepositorySpecification : RepositorySpecification
+    public class NoTagsInRepositoryWithNextVersionTxtSpecification : RepositorySpecification
     {
+        private const string ExpectedNextVersion = "0.2.0";
         private ExecutionResults _result;
 
         public void GivenARepositoryWithCommitsButNoTags()
@@ -14,15 +15,20 @@ namespace GitHubFlowVersion.AcceptanceTests
             Repository.MakeACommit();
             Repository.MakeACommit();
         }
-        
-        public void WhenGitHubFlowVersionIsExecuted()
+
+        public void AndGivenANextVersionTxtFile()
         {
-            _result = GitHubFlowVersionHelper.ExecuteIn(RepositoryPath);
+            Repository.AddNextVersionTxtFile(ExpectedNextVersion);
         }
 
         public void AndGivenRunningInTeamCity()
         {
             Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
+        }
+
+        public void WhenGitHubFlowVersionIsExecuted()
+        {
+            _result = GitHubFlowVersionHelper.ExecuteIn(RepositoryPath);
         }
 
         public void ThenAZeroExitCodeShouldOccur()
@@ -32,7 +38,7 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndTheCorrectVersionShouldBeOutput()
         {
-            _result.Output.ShouldContainCorrectBuildVersion("0.1.0", 2);
+            _result.Output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, 2);
         }
     }
 }

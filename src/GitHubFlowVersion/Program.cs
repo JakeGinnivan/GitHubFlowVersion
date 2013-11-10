@@ -84,7 +84,7 @@ namespace GitHubFlowVersion
 
             var gitHelper = new GitHelper();
             var gitRepo = new Repository(gitDirectory);
-            var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper);
+            var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper, workingDirectory);
             var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(repositoryRoot),
                 lastTaggedReleaseFinder);
             var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper,
