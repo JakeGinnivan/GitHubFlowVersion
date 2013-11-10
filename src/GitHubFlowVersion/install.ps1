@@ -1,6 +1,16 @@
 ﻿param($installPath, $toolsPath, $package, $project)
 
 $ErrorActionPreference = "Stop"
+
+$projectFolder = (get-item $project.FullName).Directory.FullName
+$fileToRemove = Join-Path $projectFolder "ToBeRemoved.txt"
+
+If (Test-Path $fileToRemove)
+{
+    Write-Host "Deleting temporary file $fileToRemove"
+    Remove-Item $fileToRemove
+}
+
 $gitDir = $null
 Write-Host "Looking for .git directory"
 while ($true)
