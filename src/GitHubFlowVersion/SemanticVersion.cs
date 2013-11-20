@@ -141,7 +141,7 @@ namespace GitHubFlowVersion
         public Version ToVersion()
         {
             if (BuildMetaData == null)
-                return new Version(Major, Minor, Patch);
+                return new Version(Major, Minor, Patch, 0);
             return new Version(Major, Minor, Patch, BuildMetaData.Value);
         }
     }

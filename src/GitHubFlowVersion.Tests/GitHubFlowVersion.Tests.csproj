@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfoUpdateTests.cs" />
     <Compile Include="BuildNumberCalculatorTests.cs" />
     <Compile Include="NextSemverCalculatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +69,9 @@
       <Project>{3C3971FC-12B4-4CD8-B6FD-D7051BED6B46}</Project>
       <Name>GitHubFlowVersion</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

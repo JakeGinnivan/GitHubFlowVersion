@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GitHubFlowVersion.BuildServers;
+﻿using GitHubFlowVersion.BuildServers;
 
 namespace GitHubFlowVersion.OutputStrategies
 {
@@ -12,12 +11,12 @@ namespace GitHubFlowVersion.OutputStrategies
             _buildServer = buildServer;
         }
 
-        public void Write(GitHubFlowArguments gitHubFlowConfiguration, Dictionary<string, string> variables, SemanticVersion nextBuildNumber)
+        public void Write(GitHubFlowVersionContext context)
         {
             if (_buildServer.IsRunningInBuildAgent())
             {
-                _buildServer.WriteBuildNumber(nextBuildNumber);
-                foreach (var variable in variables)
+                _buildServer.WriteBuildNumber(context.NextBuildNumber);
+                foreach (var variable in context.Variables)
                 {
                     _buildServer.WriteParameter(variable.Key, variable.Value);
                 }
