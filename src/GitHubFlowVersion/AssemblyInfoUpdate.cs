@@ -6,7 +6,8 @@ namespace GitHubFlowVersion
 {
     public class AssemblyInfoUpdate : IDisposable
     {
-        private readonly List<Action> _cleanupTasks = new List<Action>();
+        private readonly List<Action> _restoreBackupTasks = new List<Action>();
+        private readonly List<Action> _cleanupBackupTasks = new List<Action>();
 
         public AssemblyInfoUpdate(IFileSystem fileSystem, GitHubFlowVersionContext context)
         {
@@ -20,15 +21,16 @@ namespace GitHubFlowVersion
                 var destFileName = assemblyInfoFile + ".bak";
                 var sourceFileName = assemblyInfoFile;
                 fileSystem.Copy(assemblyInfoFile, destFileName, true);
-                _cleanupTasks.Add(() => fileSystem.Move(destFileName, sourceFileName, true));
+                _restoreBackupTasks.Add(() => fileSystem.Move(destFileName, sourceFileName, true));
+                _cleanupBackupTasks.Add(() => fileSystem.DeleteFile(destFileName));
 
                 var assemblyVersion = context.Variables[VariableProvider.AssemblyVersion];
                 var assemblyInfoVersion = context.Variables[VariableProvider.AssemblyInformationalVersion];
                 var assemblyFileVersion = context.Variables[VariableProvider.AssemblyFileVersion];
                 var fileContents = fileSystem.ReadAllText(sourceFileName)
-                .Replace("AssemblyVersion(\"1.0.0.0\")", string.Format("AssemblyVersion(\"{0}\")", assemblyVersion))
-                .Replace("AssemblyInformationalVersion(\"1.0.0.0\")", string.Format("AssemblyInformationalVersion(\"{0}\")", assemblyInfoVersion))
-                .Replace("AssemblyFileVersion(\"1.0.0.0\")", string.Format("AssemblyFileVersion(\"{0}\")", assemblyFileVersion));
+                    .RegexReplace(@"AssemblyVersion\(""\d+.\d+.\d+(.\d+|\*)?""\)", string.Format("AssemblyVersion(\"{0}\")", assemblyVersion))
+                    .RegexReplace(@"AssemblyInformationalVersion\(""\d+.\d+.\d+(.\d+|\*)?""\)", string.Format("AssemblyInformationalVersion(\"{0}\")", assemblyInfoVersion))
+                    .RegexReplace(@"AssemblyFileVersion\(""\d+.\d+.\d+(.\d+|\*)?""\)", string.Format("AssemblyFileVersion(\"{0}\")", assemblyFileVersion));
 
                 fileSystem.WriteAllText(sourceFileName, fileContents);
             }
@@ -36,10 +38,23 @@ namespace GitHubFlowVersion
 
         public void Dispose()
         {
-            foreach (var cleanupTask in _cleanupTasks)
+            foreach (var restoreBackup in _restoreBackupTasks)
             {
-                cleanupTask();
+                restoreBackup();
             }
+
+            _cleanupBackupTasks.Clear();
+            _restoreBackupTasks.Clear();
+        }
+
+        public void DoNotRestoreAssemblyInfo()
+        {
+            foreach (var cleanupBackupTask in _cleanupBackupTasks)
+            {
+                cleanupBackupTask();
+            }
+            _cleanupBackupTasks.Clear();
+            _restoreBackupTasks.Clear();
         }
     }
 }

@@ -20,11 +20,15 @@ namespace GitHubFlowVersion
 
             try
             {
-                using (new AssemblyInfoUpdate(new FileSystem(), context))
+                using (var assemblyInfoUpdate = new AssemblyInfoUpdate(new FileSystem(), context))
                 {
                     Run(context);
-                    RunExecCommandIfNeeded(context);
-                    RunMsBuildIfNeeded(context);
+                    var execRun = RunExecCommandIfNeeded(context);
+                    var msbuildRun = RunMsBuildIfNeeded(context);
+                    if (!(execRun || msbuildRun))
+                    {
+                        assemblyInfoUpdate.DoNotRestoreAssemblyInfo();
+                    }
                 }
             }
             catch (Exception ex)
@@ -69,9 +73,9 @@ namespace GitHubFlowVersion
             return context;
         }
 
-        private static void RunMsBuildIfNeeded(GitHubFlowVersionContext context)
+        private static bool RunMsBuildIfNeeded(GitHubFlowVersionContext context)
         {
-            if (string.IsNullOrEmpty(context.Arguments.ProjectFile)) return;
+            if (string.IsNullOrEmpty(context.Arguments.ProjectFile)) return false;
 
             var targetsArg = context.Arguments.Targets == null ? null : " /target:" + context.Arguments.Targets;
             Console.WriteLine("Launching {0} {1}{2}", MsBuild, context.Arguments.ProjectFile, targetsArg);
@@ -80,11 +84,13 @@ namespace GitHubFlowVersion
                 null, MsBuild, context.Arguments.ProjectFile + targetsArg, context.WorkingDirectory);
             if (results != 0)
                 throw new Exception("MsBuild execution failed, non-zero return code");
+
+            return true;
         }
 
-        private static void RunExecCommandIfNeeded(GitHubFlowVersionContext context)
+        private static bool RunExecCommandIfNeeded(GitHubFlowVersionContext context)
         {
-            if (string.IsNullOrEmpty(context.Arguments.Exec)) return;
+            if (string.IsNullOrEmpty(context.Arguments.Exec)) return false;
 
             Console.WriteLine("Launching {0} {1}", context.Arguments.Exec, context.Arguments.ExecArgs);
             var results = ProcessHelper.Run(
@@ -92,6 +98,7 @@ namespace GitHubFlowVersion
                 null, context.Arguments.Exec, context.Arguments.ExecArgs, context.WorkingDirectory);
             if (results != 0)
                 throw new Exception("MsBuild execution failed, non-zero return code");
+            return true;
         }
 
         private static void Run(GitHubFlowVersionContext context)

@@ -57,6 +57,26 @@ namespace GitHubFlowVersion.Tests
             _fileSystem.Received().Move(assemblyInfoFile + ".bak", assemblyInfoFile, true);
         }
 
+
+
+        [Fact]
+        public void CallingDoNotRestoreBackupRemovesBackupFilesWithoutRestoring()
+        {
+            _context.Arguments.UpdateAssemblyInfo = true;
+            const string assemblyInfoFile = "C:\\Dir\\Properties\\AssemblyInfo.cs";
+            _fileSystem
+                .GetFiles(Arg.Any<string>(), Arg.Any<string>(), SearchOption.AllDirectories)
+                .Returns(new[] { assemblyInfoFile });
+
+            using (var update = new AssemblyInfoUpdate(_fileSystem, _context))
+            {
+                update.DoNotRestoreAssemblyInfo();
+            }
+
+            _fileSystem.DidNotReceive().Move(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>());
+            _fileSystem.Received().DeleteFile(assemblyInfoFile + ".bak");
+        }
+
         [Fact]
         public void UpdatesVersionInAssemblyInfoFile()
         {
