@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -7,13 +6,13 @@ namespace GitHubFlowVersion.OutputStrategies
 {
     public class JsonFileOutputStrategy : IOutputStrategy
     {
-        public void Write(GitHubFlowArguments gitHubFlowConfiguration, Dictionary<string, string> variables, SemanticVersion nextBuildNumber)
+        public void Write(GitHubFlowVersionContext context)
         {
-            if (string.IsNullOrEmpty(gitHubFlowConfiguration.ToFile)) return;
+            if (string.IsNullOrEmpty(context.Arguments.ToFile)) return;
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("{");
-            var variableList = variables.ToArray();
+            var variableList = context.Variables.ToArray();
             for (var index = 0; index < variableList.Length; index++)
             {
                 var variable = variableList[index];
@@ -24,10 +23,10 @@ namespace GitHubFlowVersion.OutputStrategies
 
             stringBuilder.AppendLine("}");
 
-            var directoryName = Path.GetDirectoryName(gitHubFlowConfiguration.ToFile);
+            var directoryName = Path.GetDirectoryName(context.Arguments.ToFile);
             if (!Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
-            File.WriteAllText(gitHubFlowConfiguration.ToFile, stringBuilder.ToString());
+            File.WriteAllText(context.Arguments.ToFile, stringBuilder.ToString());
         }
     }
 }

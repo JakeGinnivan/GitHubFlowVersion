@@ -22,5 +22,8 @@ namespace GitHubFlowVersion
 
         [Description("MSBuild targets to execute")]
         public string Targets { get; set; }
+
+        [Description("Flag which will update all assembly info files, if 'Exec' or 'ProjectFile' args were specified, the change will be temporary")]
+        public bool UpdateAssemblyInfo { get; set; }
     }
 }

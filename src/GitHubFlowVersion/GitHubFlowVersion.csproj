@@ -50,9 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfoUpdate.cs" />
     <Compile Include="BuildNumberCalculator.cs" />
     <Compile Include="BuildServers\IBuildServer.cs" />
     <Compile Include="BuildServers\LocalBuild.cs" />
+    <Compile Include="FileSystem.cs" />
+    <Compile Include="GitHubFlowVersionContext.cs" />
+    <Compile Include="IFileSystem.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="GitHubFlowArguments.cs" />
     <Compile Include="IVariableProvider.cs" />
@@ -75,6 +79,7 @@
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SemanticVersionParser.cs" />
     <Compile Include="BuildServers\TeamCity.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="VariableProvider.cs" />
     <Compile Include="VersionTaggedCommit.cs" />
   </ItemGroup>
