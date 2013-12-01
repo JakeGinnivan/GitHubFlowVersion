@@ -41,6 +41,12 @@ Installing from NuGet will copy itself into `$(SolutionDir)\tools\GitHubFlowVers
 ### Why do I need to call my build process through GitHubFlowVersion
 Environmental variables can be set to process or user scoped (which is not an option for us), if you build script calls GitHubFlowVersion it will run then exit, and the variables it sets will not be avaialble for your build
 
+### How do you update AssemblyInfo.cs
+If you specify the `/UpdateAssemblyInfo` flag, then we will find all `AssemblyInfo.cs` files in your git repo and update the AssemblyVersion, AssemblyFileVersion and AssemblyInformationalVersion.
+We will only update the version in attributes which exist, so if you want us to update the AssemblyInformationalVersion then simply add that attribute into your AssemblyInfo.cs and it will be updated.
+
+If you ran *GitHubFlowVersion* with the /Exec or the /ProjectFile parameters we will automatically revert the changes we made to your AssemblyInfo.cs files after we have run your build.
+
 ### How is this different to just using Versions.txt
 It isn't that different, except it adds the following which makes the process work for Continuous Deliver and also generally reduces friction
 
