@@ -29,17 +29,7 @@
     <RemoveDir Directories="$(DropPath)" />
   </Target>
 
-  <Target Name="Version">
-    <FileUpdate Files="$(Root)src\GitHubFlowVersion\Properties\AssemblyInfo.cs"
-                Multiline="true" Singleline="false"
-                Regex="AssemblyVersion\(&quot;(\d+)\.(\d+)\.(\d+)\.(\d+)"
-                ReplacementText="AssemblyVersion(&quot;$(GitHubFlowVersion_AssemblySemVer)" />
-    <FileUpdate Files="$(Root)src\GitHubFlowVersion\Properties\AssemblyInfo.cs"
-                Regex="AssemblyFileVersion\(&quot;(\d+)\.(\d+)\.(\d+)\.(\d+)"
-                ReplacementText="AssemblyFileVersion(&quot;$(GitHubFlowVersion_AssemblySemVer)" />
-  </Target>
-
-  <Target Name="Build" DependsOnTargets="Version">
+  <Target Name="Build" DependsOnTargets="Cleanup">
     <MSBuild Projects="$(Root)src\GitHubFlowVersion.sln" Properties="Configuration=$(Configuration);Platform=$(BuildPlatform)" />
   </Target>
 

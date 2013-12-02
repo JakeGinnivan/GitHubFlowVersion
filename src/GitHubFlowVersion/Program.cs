@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Args.Help;
+using Args.Help.Formatters;
 using GitHubFlowVersion.BuildServers;
 using GitHubFlowVersion.OutputStrategies;
 using LibGit2Sharp;
@@ -14,7 +16,17 @@ namespace GitHubFlowVersion
 
         public static int Main(string[] args)
         {
-            var arguments = Args.Configuration.Configure<GitHubFlowArguments>().CreateAndBind(args);
+            var modelBindingDefinition = Args.Configuration.Configure<GitHubFlowArguments>();
+            var arguments = modelBindingDefinition.CreateAndBind(args);
+
+            if (args.Any(a => a == "/?" || a == "?" || a.Equals("/help", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                var help = new HelpProvider().GenerateModelHelp(modelBindingDefinition);
+                var f = new ConsoleHelpFormatter();
+                f.WriteHelp(help, Console.Out);
+
+                return 0;
+            }
 
             var context = CreateContext(arguments);
 
