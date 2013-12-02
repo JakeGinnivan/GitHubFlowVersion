@@ -9,7 +9,10 @@
     <projectUrl>https://github.com/JakeGinnivan/GitHubFlowVersion</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The easy way to use semantic versioning (semver.org) with GitHub Flow</description>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>
+# 1.2.0
+Added /UpdateAssemblyInfo flag to update AssemblyInfo.cs files
+</releaseNotes>
     <copyright>Copyright Jake Ginnivan 2013</copyright>
     <tags>GitHubFlow Versioning SemVer SemanticVersioning Continuous Integration Delivery</tags>
   </metadata>
