@@ -32,9 +32,9 @@ namespace GitHubFlowVersion
 
             try
             {
+                Run(context);
                 using (var assemblyInfoUpdate = new AssemblyInfoUpdate(new FileSystem(), context))
                 {
-                    Run(context);
                     var execRun = RunExecCommandIfNeeded(context);
                     var msbuildRun = RunMsBuildIfNeeded(context);
                     if (!(execRun || msbuildRun))
