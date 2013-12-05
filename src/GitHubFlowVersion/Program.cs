@@ -40,6 +40,12 @@ namespace GitHubFlowVersion
                     if (!(execRun || msbuildRun))
                     {
                         assemblyInfoUpdate.DoNotRestoreAssemblyInfo();
+                        if (!context.CurrentBuildServer.IsRunningInBuildAgent())
+                        {
+                            Console.WriteLine("WARNING: Not running in build server and /ProjectFile or /Exec arguments not passed");
+                            Console.WriteLine();
+                            Console.WriteLine("Run GitHubFlowVersion.exe /? for help");
+                        }
                     }
                 }
             }
