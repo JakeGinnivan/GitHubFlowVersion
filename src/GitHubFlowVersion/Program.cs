@@ -96,10 +96,11 @@ namespace GitHubFlowVersion
             if (string.IsNullOrEmpty(context.Arguments.ProjectFile)) return false;
 
             var targetsArg = context.Arguments.Targets == null ? null : " /target:" + context.Arguments.Targets;
-            Console.WriteLine("Launching {0} {1}{2}", MsBuild, context.Arguments.ProjectFile, targetsArg);
+            Console.WriteLine("Launching {0} \"{1}\"{2}", MsBuild, context.Arguments.ProjectFile, targetsArg);
             var results = ProcessHelper.Run(
                 Console.WriteLine, Console.Error.WriteLine,
-                null, MsBuild, context.Arguments.ProjectFile + targetsArg, context.WorkingDirectory);
+                null, MsBuild, string.Format("\"{0}\"{1}", context.Arguments.ProjectFile, targetsArg), context.RepositoryRoot);
+
             if (results != 0)
                 throw new Exception("MsBuild execution failed, non-zero return code");
 
@@ -113,7 +114,7 @@ namespace GitHubFlowVersion
             Console.WriteLine("Launching {0} {1}", context.Arguments.Exec, context.Arguments.ExecArgs);
             var results = ProcessHelper.Run(
                 Console.WriteLine, Console.Error.WriteLine,
-                null, context.Arguments.Exec, context.Arguments.ExecArgs, context.WorkingDirectory);
+                null, context.Arguments.Exec, context.Arguments.ExecArgs, context.RepositoryRoot);
             if (results != 0)
                 throw new Exception("MsBuild execution failed, non-zero return code");
             return true;
