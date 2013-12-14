@@ -6,7 +6,7 @@ namespace GitVersion.OutputStrategies
 {
     public class JsonFileOutputStrategy : IOutputStrategy
     {
-        public void Write(GitHubFlowVersionContext context)
+        public void Write(GitVersionContext context)
         {
             if (string.IsNullOrEmpty(context.Arguments.ToFile)) return;
 

@@ -11,7 +11,7 @@ namespace GitVersion.OutputStrategies
             _buildServer = buildServer;
         }
 
-        public void Write(GitHubFlowVersionContext context)
+        public void Write(GitVersionContext context)
         {
             if (_buildServer.IsRunningInBuildAgent())
             {

@@ -1,4 +1,5 @@
 ﻿using GitVersion;
+using GitVersion.BranchingStrategies.GitHubFlow;
 using GitVersion.BuildServers;
 using GitVersion.Infrastructure;
 using LibGit2Sharp;
@@ -9,7 +10,7 @@ namespace GitHubFlowVersion.Tests
 {
     public class BuildNumberCalculatorTests
     {
-        private readonly INextSemverCalculator _nextSemver;
+        private readonly ISemanticVersionCalculator _semanticVersion;
         private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
         private readonly BuildNumberCalculator _sut;
         private readonly IGitHelper _gitHelper;
@@ -18,12 +19,12 @@ namespace GitHubFlowVersion.Tests
         public BuildNumberCalculatorTests()
         {
             var gitRepo = Substitute.For<IRepository>();
-            _nextSemver = Substitute.For<INextSemverCalculator>();
+            _semanticVersion = Substitute.For<ISemanticVersionCalculator>();
             _lastTaggedReleaseFinder = Substitute.For<ILastTaggedReleaseFinder>();
             _gitHelper = Substitute.For<IGitHelper>();
             _buildServer = Substitute.For<IBuildServer>();
             var log = Substitute.For<ILog>();
-            _sut = new BuildNumberCalculator(_nextSemver, _lastTaggedReleaseFinder, _gitHelper, gitRepo, _buildServer, log);
+            _sut = new BuildNumberCalculator(_semanticVersion, _lastTaggedReleaseFinder, _gitHelper, gitRepo, _buildServer, log);
         }
 
         [Fact]
@@ -31,7 +32,7 @@ namespace GitHubFlowVersion.Tests
         {
             _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(null, null));
             var semver = new SemanticVersion(0, 1, 2);
-            _nextSemver.NextVersion().Returns(semver);
+            _semanticVersion.NextVersion().Returns(semver);
 
             var buildNumber = _sut.GetBuildNumber();
 
@@ -44,7 +45,7 @@ namespace GitHubFlowVersion.Tests
             _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(null, null));
             _gitHelper.NumberOfCommitsOnBranchSinceCommit(Arg.Any<Branch>(), Arg.Any<Commit>()).Returns(5);
             var semver = new SemanticVersion(0, 1, 2);
-            _nextSemver.NextVersion().Returns(semver);
+            _semanticVersion.NextVersion().Returns(semver);
 
             var buildNumber = _sut.GetBuildNumber();
 
@@ -59,7 +60,7 @@ namespace GitHubFlowVersion.Tests
             _buildServer.CurrentPullRequestNo(Arg.Any<Branch>()).Returns(3);
             _gitHelper.NumberOfCommitsOnBranchSinceCommit(Arg.Any<Branch>(), Arg.Any<Commit>()).Returns(5);
             var semver = new SemanticVersion(0, 1, 2);
-            _nextSemver.NextVersion().Returns(semver);
+            _semanticVersion.NextVersion().Returns(semver);
 
             var buildNumber = _sut.GetBuildNumber();
 

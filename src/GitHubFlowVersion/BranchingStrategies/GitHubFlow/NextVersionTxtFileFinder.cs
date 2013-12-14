@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace GitVersion
+namespace GitVersion.BranchingStrategies.GitHubFlow
 {
     public class NextVersionTxtFileFinder : INextVersionTxtFileFinder
     {

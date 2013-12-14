@@ -2,6 +2,6 @@
 {
     public interface IOutputStrategy
     {
-        void Write(GitHubFlowVersionContext context);
+        void Write(GitVersionContext context);
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace GitVersion
+﻿namespace GitVersion.BranchingStrategies.GitHubFlow
 {
-    // todo: fix spelling mistake
-    public class NextSemverCalculator : INextSemverCalculator
+    public class GitHubFlowSemamticVersionCalculator : ISemanticVersionCalculator
     {
         private readonly INextVersionTxtFileFinder _nextVersionTxtFileFinder;
         private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
 
-        public NextSemverCalculator(
+        public GitHubFlowSemamticVersionCalculator(
             INextVersionTxtFileFinder nextVersionTxtFileFinder,
             ILastTaggedReleaseFinder lastTaggedReleaseFinder)
         {

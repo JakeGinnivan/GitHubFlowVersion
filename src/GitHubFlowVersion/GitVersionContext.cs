@@ -3,7 +3,7 @@ using GitVersion.BuildServers;
 
 namespace GitVersion
 {
-    public class GitHubFlowVersionContext
+    public class GitVersionContext
     {
         public string GitDirectory { get; set; }
         public string WorkingDirectory { get; set; }

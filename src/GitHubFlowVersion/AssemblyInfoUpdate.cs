@@ -10,7 +10,7 @@ namespace GitVersion
         private readonly List<Action> _restoreBackupTasks = new List<Action>();
         private readonly List<Action> _cleanupBackupTasks = new List<Action>();
 
-        public AssemblyInfoUpdate(IFileSystem fileSystem, GitHubFlowVersionContext context)
+        public AssemblyInfoUpdate(IFileSystem fileSystem, GitVersionContext context)
         {
             if (!context.Arguments.UpdateAssemblyInfo) return;
 

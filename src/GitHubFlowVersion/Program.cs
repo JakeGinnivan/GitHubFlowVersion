@@ -6,8 +6,6 @@ using Args.Help;
 using Args.Help.Formatters;
 using GitVersion.BuildServers;
 using GitVersion.Infrastructure;
-using GitVersion.OutputStrategies;
-using LibGit2Sharp;
 
 namespace GitVersion
 {
@@ -35,7 +33,7 @@ namespace GitVersion
 
             try
             {
-                Run(context, gitHelper, log);
+                GitVersionCalculator.Run(context, gitHelper, log);
                 using (var assemblyInfoUpdate = new AssemblyInfoUpdate(new FileSystem(), context))
                 {
                     var execRun = RunExecCommandIfNeeded(context, log);
@@ -61,9 +59,9 @@ namespace GitVersion
             return 0;
         }
 
-        private static GitHubFlowVersionContext CreateContext(GitHubFlowArguments arguments, ILog log, IGitHelper gitHelper)
+        private static GitVersionContext CreateContext(GitHubFlowArguments arguments, ILog log, IGitHelper gitHelper)
         {
-            var context = new GitHubFlowVersionContext
+            var context = new GitVersionContext
             {
                 Arguments = arguments,
                 WorkingDirectory =
@@ -94,7 +92,7 @@ namespace GitVersion
             return context;
         }
 
-        private static bool RunMsBuildIfNeeded(GitHubFlowVersionContext context, ILog log)
+        private static bool RunMsBuildIfNeeded(GitVersionContext context, ILog log)
         {
             if (string.IsNullOrEmpty(context.Arguments.ProjectFile)) return false;
 
@@ -110,7 +108,7 @@ namespace GitVersion
             return true;
         }
 
-        private static bool RunExecCommandIfNeeded(GitHubFlowVersionContext context, ILog log)
+        private static bool RunExecCommandIfNeeded(GitVersionContext context, ILog log)
         {
             if (string.IsNullOrEmpty(context.Arguments.Exec)) return false;
 
@@ -121,38 +119,6 @@ namespace GitVersion
             if (results != 0)
                 throw new Exception("MsBuild execution failed, non-zero return code");
             return true;
-        }
-
-        private static void Run(GitHubFlowVersionContext context, IGitHelper gitHelper, ILog log)
-        {
-            using (var gitRepo = new Repository(context.GitDirectory))
-            {
-                var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper, context.WorkingDirectory);
-                var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(context.RepositoryRoot),
-                    lastTaggedReleaseFinder);
-                var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper,
-                    gitRepo, context.CurrentBuildServer, log);
-
-                context.NextBuildNumber = buildNumberCalculator.GetBuildNumber();
-
-                var variableProvider = new VariableProvider();
-                context.Variables = variableProvider.GetVariables(context.NextBuildNumber);
-                WriteResults(context);
-            }
-         }
-
-        private static void WriteResults(GitHubFlowVersionContext context)
-        {
-            var outputStrategies = new IOutputStrategy[]
-            {
-                new BuildServerOutputStrategy(context.CurrentBuildServer),
-                new JsonFileOutputStrategy(),
-                new EnvironmentalVariablesOutputStrategy()
-            };
-            foreach (var outputStrategy in outputStrategies)
-            {
-                outputStrategy.Write(context);
-            }
         }
     }
 }

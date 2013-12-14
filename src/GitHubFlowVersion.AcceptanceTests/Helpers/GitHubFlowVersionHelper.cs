@@ -12,7 +12,7 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
         public static ExecutionResults ExecuteIn(string workingDirectory, string toFile = null, 
             string exec = null, string execArgs = null, string projectFile = null, string targets = null)
         {
-            var gitHubFlowVersion = Path.Combine(PathHelper.GetCurrentDirectory(), "GitHubFlowVersion.exe");
+            var gitHubFlowVersion = Path.Combine(PathHelper.GetCurrentDirectory(), "GitVersion.exe");
             string toFileArg = toFile == null ? null : string.Format(" /ToFile \"{0}\"", toFile);
             string execArg = exec == null ? null : string.Format(" /Exec \"{0}\"", exec);
             string execArgsArg = execArgs == null ? null : string.Format(" /ExecArgs \"{0}\"", execArgs);
@@ -27,7 +27,7 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
             Console.WriteLine();
             var exitCode = ProcessHelper.Run(s => output.AppendLine(s), s => output.AppendLine(s), null, gitHubFlowVersion, arguments, workingDirectory);
 
-            Console.WriteLine("Output from GitHubFlowVersion.exe");
+            Console.WriteLine("Output from GitVersion.exe");
             Console.WriteLine("-------------------------------------------------------");
             Console.WriteLine(output.ToString());
             Console.WriteLine();

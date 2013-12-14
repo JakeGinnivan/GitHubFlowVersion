@@ -4,7 +4,7 @@ namespace GitVersion.OutputStrategies
 {
     public class EnvironmentalVariablesOutputStrategy : IOutputStrategy
     {
-        public void Write(GitHubFlowVersionContext context)
+        public void Write(GitVersionContext context)
         {
             foreach (var variable in context.Variables)
             {

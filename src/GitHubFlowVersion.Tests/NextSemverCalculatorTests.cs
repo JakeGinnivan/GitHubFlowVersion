@@ -1,4 +1,5 @@
 ﻿using GitVersion;
+using GitVersion.BranchingStrategies.GitHubFlow;
 using LibGit2Sharp;
 using NSubstitute;
 using Xunit;
@@ -9,13 +10,13 @@ namespace GitHubFlowVersion.Tests
     {
         private readonly ILastTaggedReleaseFinder _lastTaggedReleaseFinder;
         private readonly INextVersionTxtFileFinder _txtFileVersion;
-        private readonly NextSemverCalculator _sut;
+        private readonly GitHubFlowSemamticVersionCalculator _sut;
 
         public NextSemverCalculatorTests()
         {
             _lastTaggedReleaseFinder = Substitute.For<ILastTaggedReleaseFinder>();
             _txtFileVersion = Substitute.For<INextVersionTxtFileFinder>();
-            _sut = new NextSemverCalculator(_txtFileVersion, _lastTaggedReleaseFinder);
+            _sut = new GitHubFlowSemamticVersionCalculator(_txtFileVersion, _lastTaggedReleaseFinder);
         }
 
         [Fact]
