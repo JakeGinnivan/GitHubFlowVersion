@@ -38,12 +38,7 @@ namespace GitHubFlowVersion.AcceptanceTests.Helpers
 
         public static void ShouldContainCorrectBuildVersion(this string output, string version, int commitsSinceTag)
         {
-            Assert.Contains(string.Format("##teamcity[buildNumber '{0}+{1:000}']", version, commitsSinceTag), output);
-        }
-
-        public static void ShouldContainFourPartVersionVariable(this string output, string version, int numCommitsToMake)
-        {
-            Assert.Contains(string.Format("##teamcity[setParameter name='system.GitHubFlowVersion.FourPartVersion' value='{0}.{1}']", version, numCommitsToMake), output);
+            Assert.Contains(string.Format("Version number is '{0}+{1:000}'", version, commitsSinceTag), output);
         }
 
         public static void AddNextVersionTxtFile(this IRepository repository, string version)

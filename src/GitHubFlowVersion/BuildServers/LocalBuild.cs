@@ -1,4 +1,6 @@
-﻿namespace GitHubFlowVersion.BuildServers
+﻿using LibGit2Sharp;
+
+namespace GitHubFlowVersion.BuildServers
 {
     public class LocalBuild : IBuildServer
     {
@@ -7,12 +9,12 @@
             return false;
         }
 
-        public bool IsBuildingAPullRequest()
+        public bool IsBuildingAPullRequest(IRepository repository)
         {
             return false;
         }
 
-        public int CurrentPullRequestNo()
+        public int CurrentPullRequestNo(Branch branch)
         {
             return 0;
         }

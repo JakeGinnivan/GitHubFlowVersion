@@ -19,11 +19,6 @@ namespace GitHubFlowVersion.AcceptanceTests
             Repository.MakeATaggedCommit(TaggedVersion);
         }
 
-        public void AndGivenRunningInTeamCity()
-        {
-            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
-        }
-
         public void AndGivenRepositoryHasAnotherXCommits()
         {
             Repository.MakeCommits(_numCommitsToMake);
@@ -47,7 +42,6 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void AndTheCorrectVersionShouldBeOutput()
         {
             _result.Output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
-            _result.Output.ShouldContainFourPartVersionVariable(ExpectedNextVersion, _numCommitsToMake);
         }
         [Theory]
         [InlineData(1)]
@@ -57,6 +51,7 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void Run(int noCommits)
         {
             _numCommitsToMake = noCommits;
+            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", null);
             this.BDDfy();
         }
 
