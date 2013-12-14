@@ -17,11 +17,6 @@ namespace GitHubFlowVersion.AcceptanceTests
 
         public void AndGivenThereIsNoNextVersionTxtFile() {}
 
-        public void AndGivenRunningInTeamCity()
-        {
-            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
-        }
-
         public void WhenGitHubFlowVersionIsExecuted()
         {
             _result = GitHubFlowVersionHelper.ExecuteIn(RepositoryPath);

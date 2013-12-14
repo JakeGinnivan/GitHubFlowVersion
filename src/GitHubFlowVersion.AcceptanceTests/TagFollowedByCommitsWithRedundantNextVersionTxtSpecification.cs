@@ -1,5 +1,4 @@
-﻿using System;
-using GitHubFlowVersion.AcceptanceTests.Helpers;
+﻿using GitHubFlowVersion.AcceptanceTests.Helpers;
 using TestStack.BDDfy;
 using Xunit.Extensions;
 
@@ -16,11 +15,6 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void GivenARepositoryWithASingleTag()
         {
             Repository.MakeATaggedCommit(TaggedVersion);
-        }
-
-        public void AndGivenRunningInTeamCity()
-        {
-            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
         }
 
         public void AndGivenRepositoryHasAnotherXCommits()
@@ -46,7 +40,6 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void AndTheCorrectVersionShouldBeOutput()
         {
             _result.Output.ShouldContainCorrectBuildVersion(ExpectedNextVersion, _numCommitsToMake);
-            _result.Output.ShouldContainFourPartVersionVariable(ExpectedNextVersion, _numCommitsToMake);
         }
 
         [Theory]

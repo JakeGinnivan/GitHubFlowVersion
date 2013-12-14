@@ -52,8 +52,8 @@ namespace GitHubFlowVersion.Tests
         public void PullRequestsAreTaggedWithPreReleaseSemverTag()
         {
             _lastTaggedReleaseFinder.GetVersion().Returns(new VersionTaggedCommit(null, null));
-            _buildServer.IsBuildingAPullRequest().Returns(true);
-            _buildServer.CurrentPullRequestNo().Returns(3);
+            _buildServer.IsBuildingAPullRequest(Arg.Any<IRepository>()).Returns(true);
+            _buildServer.CurrentPullRequestNo(Arg.Any<Branch>()).Returns(3);
             _gitHelper.NumberOfCommitsOnBranchSinceCommit(Arg.Any<Branch>(), Arg.Any<Commit>()).Returns(5);
             var semver = new SemanticVersion(0, 1, 2);
             _nextSemver.NextVersion().Returns(semver);

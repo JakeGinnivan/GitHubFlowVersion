@@ -14,15 +14,10 @@ namespace GitHubFlowVersion.AcceptanceTests
             Repository.MakeACommit();
             Repository.MakeACommit();
         }
-        
+
         public void WhenGitHubFlowVersionIsExecuted()
         {
             _result = GitHubFlowVersionHelper.ExecuteIn(RepositoryPath);
-        }
-
-        public void AndGivenRunningInTeamCity()
-        {
-            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
         }
 
         public void ThenAZeroExitCodeShouldOccur()

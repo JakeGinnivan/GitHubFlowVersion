@@ -11,26 +11,49 @@ namespace GitHubFlowVersion.AcceptanceTests
         private const string TaggedVersion = "1.0.3";
         protected abstract string PullRequestBranchName();
 
-        public void GivenATagOnMaster()
+        public void GivenARemoteWithATagOnMaster()
         {
-            Repository.MakeATaggedCommit(TaggedVersion);
+            RemoteRepositoryPath = PathHelper.GetTempPath();
+            Repository.Init(RemoteRepositoryPath);
+            RemoteRepository = new Repository(RemoteRepositoryPath);
+            Repository.Config.Set("user.name", "Test");
+            Repository.Config.Set("user.email", "test@email.com");
+            RemoteReference = Repository.Network.Remotes.Add("origin", RemoteRepositoryPath);
+            Console.WriteLine("Created git repository at {0}", RemoteRepositoryPath);
+            RemoteRepository.MakeATaggedCommit(TaggedVersion);
         }
 
-        public void AndGivenAFeatureBranchWithTwoCommits()
-        {
-            var branch = Repository.CreateBranch("FeatureBranch");
-            Repository.Checkout(branch);
-            Repository.MakeCommits(2);
-        }
+        protected Remote RemoteReference { get; private set; }
+        protected Repository RemoteRepository { get; private set; }
+        protected string RemoteRepositoryPath { get; private set; }
+        protected string MergeCommitSha { get; private set; }
 
         public void AndGivenRunningInTeamCity()
         {
             Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "8.0.4");
         }
 
-        public void AndGivenAnEnvironmentalVariableWithPullRequestRefBranch()
+        public void AndGivenARemoteFeatureBranchWithTwoCommits()
         {
-            Environment.SetEnvironmentVariable("GitBranchName", PullRequestBranchName());
+            var branch = RemoteRepository.CreateBranch("FeatureBranch");
+            RemoteRepository.Checkout(branch);
+            RemoteRepository.MakeCommits(2);
+        }
+
+        public void AndGivenRemoteHasPullRefWithMergeCommit()
+        {
+            var pullRequestBranchName = PullRequestBranchName();
+            RemoteRepository.Checkout(RemoteRepository.Head.Tip.Sha);
+            //Emulate merge commit
+            MergeCommitSha = RemoteRepository.MakeACommit().Sha;
+            RemoteRepository.Checkout("master"); // HEAD cannot be pointing at the merge commit
+            RemoteRepository.Refs.Add(pullRequestBranchName, new ObjectId(MergeCommitSha));
+        }
+
+        public void AndGivenTeamCityHasCheckedOutThePullMergeCommit()
+        {
+            Repository.Fetch("origin");
+            Repository.Checkout(MergeCommitSha);
         }
 
         public void WhenGitHubFlowVersionIsExecuted()
@@ -46,11 +69,6 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void AndTheCorrectVersionShouldBeOutput()
         {
             Assert.Contains("1.0.4-PullRequest5", _result.Output);
-        }
-
-        protected override void Cleanup()
-        {
-            Environment.SetEnvironmentVariable("GitBranchName", null);
         }
 
         public class StashPullRequests : PullRequestsSpecification

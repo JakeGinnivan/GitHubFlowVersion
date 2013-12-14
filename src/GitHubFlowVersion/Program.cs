@@ -51,7 +51,7 @@ namespace GitHubFlowVersion
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex);
                 return 1;
             }
 
@@ -68,7 +68,7 @@ namespace GitHubFlowVersion
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
             };
             var fallbackStrategy = new LocalBuild();
-            var buildServers = new IBuildServer[] {new TeamCity()};
+            var buildServers = new IBuildServer[] {new TeamCity(context)};
             context.CurrentBuildServer = buildServers.FirstOrDefault(s => s.IsRunningInBuildAgent()) ?? fallbackStrategy;
 
             context.GitDirectory = GitDirFinder.TreeWalkForGitDir(context.WorkingDirectory);

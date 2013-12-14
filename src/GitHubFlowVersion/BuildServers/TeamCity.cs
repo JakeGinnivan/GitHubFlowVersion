@@ -1,10 +1,17 @@
 ﻿using System;
-using System.Collections;
+using LibGit2Sharp;
 
 namespace GitHubFlowVersion.BuildServers
 {
     public class TeamCity : IBuildServer
     {
+        private readonly GitHubFlowVersionContext _context;
+
+        public TeamCity(GitHubFlowVersionContext context)
+        {
+            _context = context;
+        }
+
         public bool IsRunningInBuildAgent()
         {
             var isRunningInBuildAgent = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
@@ -15,21 +22,22 @@ namespace GitHubFlowVersion.BuildServers
             return isRunningInBuildAgent;
         }
 
-        public bool IsBuildingAPullRequest()
+        public bool IsBuildingAPullRequest(IRepository repository)
         {
-            var branchInfo = GetBranchEnvironmentVariable();
+            GitHelper.NormalizeGitRepository(repository);
+            var branchInfo = repository.Head.CanonicalName;
             var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) &&
                 (branchInfo.ToLower().Contains("/pull/") || branchInfo.ToLower().Contains("/pull-requests/"));
             if (isBuildingAPullRequest)
             {
-                Console.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo());
+                Console.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo(repository.Head));
             }
             return isBuildingAPullRequest;
         }
 
-        public int CurrentPullRequestNo()
+        public int CurrentPullRequestNo(Branch branch)
         {
-            return int.Parse(GetBranchEnvironmentVariable().Split('/')[2]);
+            return int.Parse(branch.CanonicalName.Split('/')[3]);
         }
 
         public void WriteBuildNumber(SemanticVersion nextBuildNumber)
@@ -40,20 +48,6 @@ namespace GitHubFlowVersion.BuildServers
         public void WriteParameter(string variableName, string value)
         {
             TeamCityVersionWriter.WriteParameter(variableName.Replace('_', '.'), value);
-        }
-
-        string GetBranchEnvironmentVariable()
-        {
-            foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
-            {
-                if (((string)de.Key).StartsWith("GitBranchName", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    Console.WriteLine("Found Teamcity Branch: {0}", de.Value);
-                    return (string)de.Value;
-                }
-            }
-
-            return null;
         }
     }
 }
