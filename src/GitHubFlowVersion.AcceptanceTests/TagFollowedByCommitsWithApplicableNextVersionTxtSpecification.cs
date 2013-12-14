@@ -1,4 +1,5 @@
-﻿using GitHubFlowVersion.AcceptanceTests.Helpers;
+﻿using System;
+using GitHubFlowVersion.AcceptanceTests.Helpers;
 using Xunit;
 using TestStack.BDDfy;
 using Xunit.Extensions;
@@ -50,6 +51,7 @@ namespace GitHubFlowVersion.AcceptanceTests
         public void Run(int noCommits)
         {
             _numCommitsToMake = noCommits;
+            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", null);
             this.BDDfy();
         }
 
