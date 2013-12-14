@@ -16,8 +16,8 @@ namespace GitHubFlowVersion.AcceptanceTests
             RemoteRepositoryPath = PathHelper.GetTempPath();
             Repository.Init(RemoteRepositoryPath);
             RemoteRepository = new Repository(RemoteRepositoryPath);
-            Repository.Config.Set("user.name", "Test");
-            Repository.Config.Set("user.email", "test@email.com");
+            RemoteRepository.Config.Set("user.name", "Test");
+            RemoteRepository.Config.Set("user.email", "test@email.com");
             RemoteReference = Repository.Network.Remotes.Add("origin", RemoteRepositoryPath);
             Console.WriteLine("Created git repository at {0}", RemoteRepositoryPath);
             RemoteRepository.MakeATaggedCommit(TaggedVersion);
