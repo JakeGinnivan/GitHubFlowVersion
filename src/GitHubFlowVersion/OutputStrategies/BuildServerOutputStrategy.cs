@@ -1,6 +1,6 @@
-﻿using GitHubFlowVersion.BuildServers;
+﻿using GitVersion.BuildServers;
 
-namespace GitHubFlowVersion.OutputStrategies
+namespace GitVersion.OutputStrategies
 {
     public class BuildServerOutputStrategy : IOutputStrategy
     {

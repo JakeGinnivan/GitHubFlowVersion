@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using GitVersion;
+using LibGit2Sharp;
 using NSubstitute;
 using Xunit;
 

@@ -1,7 +1,6 @@
 using System.IO;
-using System.Security.Cryptography;
 
-namespace GitHubFlowVersion
+namespace GitVersion.Infrastructure
 {
     class FileSystem : IFileSystem
     {

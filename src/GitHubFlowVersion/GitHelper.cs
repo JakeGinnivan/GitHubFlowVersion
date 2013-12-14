@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using GitVersion.Infrastructure;
 using LibGit2Sharp;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class GitHelper : IGitHelper
     {
@@ -91,6 +92,11 @@ namespace GitHubFlowVersion
             }
 
             CreateFakeBranchPointingAtThePullRequestTip(repository);
+        }
+
+        public bool HasBranch(IRepository repository, string branchName)
+        {
+            return repository.Branches.Any(b => b.Name == branchName);
         }
 
         static void EnsureOnlyOneRemoteIsDefined(IRepository repo)

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GitHubFlowVersion.BuildServers;
+using GitVersion.BuildServers;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class GitHubFlowVersionContext
     {

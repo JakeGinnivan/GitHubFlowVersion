@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class VariableProvider : IVariableProvider
     {

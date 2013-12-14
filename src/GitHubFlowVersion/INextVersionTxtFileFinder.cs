@@ -1,4 +1,4 @@
-﻿namespace GitHubFlowVersion
+﻿namespace GitVersion
 {
     public interface INextVersionTxtFileFinder
     {

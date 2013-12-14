@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace GitHubFlowVersion
+namespace GitVersion.Infrastructure
 {
     public interface IFileSystem
     {

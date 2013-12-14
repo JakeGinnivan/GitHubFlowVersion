@@ -1,4 +1,4 @@
-﻿namespace GitHubFlowVersion
+﻿namespace GitVersion
 {
     // todo: fix spelling mistake
     public class NextSemverCalculator : INextSemverCalculator

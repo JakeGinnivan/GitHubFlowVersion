@@ -4,11 +4,12 @@ using System.Linq;
 using System.Reflection;
 using Args.Help;
 using Args.Help.Formatters;
-using GitHubFlowVersion.BuildServers;
-using GitHubFlowVersion.OutputStrategies;
+using GitVersion.BuildServers;
+using GitVersion.Infrastructure;
+using GitVersion.OutputStrategies;
 using LibGit2Sharp;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class Program
     {

@@ -1,4 +1,4 @@
-﻿namespace GitHubFlowVersion.OutputStrategies
+﻿namespace GitVersion.OutputStrategies
 {
     public interface IOutputStrategy
     {

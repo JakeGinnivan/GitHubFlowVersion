@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitHubFlowVersion.OutputStrategies
+namespace GitVersion.OutputStrategies
 {
     public class EnvironmentalVariablesOutputStrategy : IOutputStrategy
     {

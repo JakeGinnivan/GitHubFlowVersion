@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class NextVersionTxtFileFinder : INextVersionTxtFileFinder
     {

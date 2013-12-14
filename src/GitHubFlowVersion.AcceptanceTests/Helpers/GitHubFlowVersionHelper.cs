@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using GitVersion;
 using LibGit2Sharp;
 using Xunit;
 

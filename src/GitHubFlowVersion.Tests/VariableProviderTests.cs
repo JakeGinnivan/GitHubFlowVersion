@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using GitVersion;
+using Xunit;
 
 namespace GitHubFlowVersion.Tests
 {

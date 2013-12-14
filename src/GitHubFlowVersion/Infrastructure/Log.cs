@@ -1,6 +1,6 @@
 using System;
 
-namespace GitHubFlowVersion
+namespace GitVersion.Infrastructure
 {
     class Log : ILog
     {

@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using GitVersion;
+using GitVersion.Infrastructure;
 using NSubstitute;
 using Xunit;
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public interface IVariableProvider
     {

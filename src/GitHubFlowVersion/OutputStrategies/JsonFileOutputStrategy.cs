@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace GitHubFlowVersion.OutputStrategies
+namespace GitVersion.OutputStrategies
 {
     public class JsonFileOutputStrategy : IOutputStrategy
     {

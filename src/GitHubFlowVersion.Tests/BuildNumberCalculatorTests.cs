@@ -1,4 +1,6 @@
-﻿using GitHubFlowVersion.BuildServers;
+﻿using GitVersion;
+using GitVersion.BuildServers;
+using GitVersion.Infrastructure;
 using LibGit2Sharp;
 using NSubstitute;
 using Xunit;

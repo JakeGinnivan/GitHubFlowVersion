@@ -1,6 +1,6 @@
 ﻿using LibGit2Sharp;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public interface IGitHelper
     {
@@ -8,5 +8,6 @@ namespace GitHubFlowVersion
         void EnsurePullBranchShareACommonAncestorWithDevelop(IRepository repository, Branch pullBranch);
         Branch GetBranch(IRepository repository, string name);
         void NormalizeGitRepository(IRepository repository);
+        bool HasBranch(IRepository repository, string branchName);
     }
 }

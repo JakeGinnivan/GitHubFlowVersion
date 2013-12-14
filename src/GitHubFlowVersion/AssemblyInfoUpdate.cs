@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using GitVersion.Infrastructure;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class AssemblyInfoUpdate : IDisposable
     {
