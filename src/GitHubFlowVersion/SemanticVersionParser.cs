@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class SemanticVersionParser
     {

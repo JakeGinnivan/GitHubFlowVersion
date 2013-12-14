@@ -1,6 +1,6 @@
-﻿using GitHubFlowVersion.BuildServers;
+﻿using GitVersion.BuildServers;
 
-namespace GitHubFlowVersion.OutputStrategies
+namespace GitVersion.OutputStrategies
 {
     public class BuildServerOutputStrategy : IOutputStrategy
     {
@@ -11,7 +11,7 @@ namespace GitHubFlowVersion.OutputStrategies
             _buildServer = buildServer;
         }
 
-        public void Write(GitHubFlowVersionContext context)
+        public void Write(GitVersionContext context)
         {
             if (_buildServer.IsRunningInBuildAgent())
             {

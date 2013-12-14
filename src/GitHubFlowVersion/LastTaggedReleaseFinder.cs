@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using LibGit2Sharp;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class LastTaggedReleaseFinder : ILastTaggedReleaseFinder
     {

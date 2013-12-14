@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class GitHubFlowArguments
     {

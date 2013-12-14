@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public static class StringExtensions
     {

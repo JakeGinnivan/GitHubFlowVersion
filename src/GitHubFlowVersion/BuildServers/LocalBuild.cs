@@ -1,6 +1,6 @@
 ﻿using LibGit2Sharp;
 
-namespace GitHubFlowVersion.BuildServers
+namespace GitVersion.BuildServers
 {
     public class LocalBuild : IBuildServer
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitHubFlowVersion.BuildServers
+namespace GitVersion.BuildServers
 {
     public class TeamCityVersionWriter
     {

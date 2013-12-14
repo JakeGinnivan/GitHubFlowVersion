@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using GitVersion;
+using GitVersion.Infrastructure;
 using NSubstitute;
 using Xunit;
 
@@ -7,11 +9,11 @@ namespace GitHubFlowVersion.Tests
     public class AssemblyInfoUpdateTests
     {
         private readonly IFileSystem _fileSystem;
-        private readonly GitHubFlowVersionContext _context;
+        private readonly GitVersionContext _context;
 
         public AssemblyInfoUpdateTests()
         {
-            _context = new GitHubFlowVersionContext
+            _context = new GitVersionContext
             {
                 Arguments = new GitHubFlowArguments(),
                 Variables = new VariableProvider().GetVariables(new SemanticVersion(1, 2, 3, "beta", 4))

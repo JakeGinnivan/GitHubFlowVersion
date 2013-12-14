@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using GitVersion.Infrastructure;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class AssemblyInfoUpdate : IDisposable
     {
         private readonly List<Action> _restoreBackupTasks = new List<Action>();
         private readonly List<Action> _cleanupBackupTasks = new List<Action>();
 
-        public AssemblyInfoUpdate(IFileSystem fileSystem, GitHubFlowVersionContext context)
+        public AssemblyInfoUpdate(IFileSystem fileSystem, GitVersionContext context)
         {
             if (!context.Arguments.UpdateAssemblyInfo) return;
 

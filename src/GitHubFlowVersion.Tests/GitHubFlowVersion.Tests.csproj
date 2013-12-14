@@ -65,9 +65,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitHubFlowVersion\GitHubFlowVersion.csproj">
+    <ProjectReference Include="..\GitHubFlowVersion\GitVersion.csproj">
       <Project>{3C3971FC-12B4-4CD8-B6FD-D7051BED6B46}</Project>
-      <Name>GitHubFlowVersion</Name>
+      <Name>GitVersion</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

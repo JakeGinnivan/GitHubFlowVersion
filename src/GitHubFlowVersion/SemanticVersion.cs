@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class SemanticVersion
     {

@@ -90,9 +90,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitHubFlowVersion\GitHubFlowVersion.csproj">
+    <ProjectReference Include="..\GitHubFlowVersion\GitVersion.csproj">
       <Project>{3c3971fc-12b4-4cd8-b6fd-d7051bed6b46}</Project>
-      <Name>GitHubFlowVersion</Name>
+      <Name>GitVersion</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

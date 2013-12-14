@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubFlowVersion", "GitHubFlowVersion\GitHubFlowVersion.csproj", "{3C3971FC-12B4-4CD8-B6FD-D7051BED6B46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitVersion", "GitHubFlowVersion\GitVersion.csproj", "{3C3971FC-12B4-4CD8-B6FD-D7051BED6B46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubFlowVersion.Tests", "GitHubFlowVersion.Tests\GitHubFlowVersion.Tests.csproj", "{9ED6B8C7-832E-402C-B3BB-0F44C9D31ACF}"
 EndProject

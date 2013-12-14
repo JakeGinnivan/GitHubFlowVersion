@@ -1,15 +1,18 @@
 ﻿using System;
+using GitVersion.Infrastructure;
 using LibGit2Sharp;
 
-namespace GitHubFlowVersion.BuildServers
+namespace GitVersion.BuildServers
 {
     public class TeamCity : IBuildServer
     {
-        private readonly GitHubFlowVersionContext _context;
+        private readonly ILog _log;
+        private readonly IGitHelper _gitHelper;
 
-        public TeamCity(GitHubFlowVersionContext context)
+        public TeamCity(ILog log, IGitHelper gitHelper)
         {
-            _context = context;
+            _log = log;
+            _gitHelper = gitHelper;
         }
 
         public bool IsRunningInBuildAgent()
@@ -17,20 +20,20 @@ namespace GitHubFlowVersion.BuildServers
             var isRunningInBuildAgent = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
             if (isRunningInBuildAgent)
             {
-                Console.WriteLine("Executing inside a TeamCity build agent");
+                _log.WriteLine("Executing inside a TeamCity build agent");
             }
             return isRunningInBuildAgent;
         }
 
         public bool IsBuildingAPullRequest(IRepository repository)
         {
-            GitHelper.NormalizeGitRepository(repository);
+            _gitHelper.NormalizeGitRepository(repository);
             var branchInfo = repository.Head.CanonicalName;
             var isBuildingAPullRequest = !string.IsNullOrEmpty(branchInfo) &&
                 (branchInfo.ToLower().Contains("/pull/") || branchInfo.ToLower().Contains("/pull-requests/"));
             if (isBuildingAPullRequest)
             {
-                Console.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo(repository.Head));
+                _log.WriteLine("This is a pull request build for pull: " + CurrentPullRequestNo(repository.Head));
             }
             return isBuildingAPullRequest;
         }

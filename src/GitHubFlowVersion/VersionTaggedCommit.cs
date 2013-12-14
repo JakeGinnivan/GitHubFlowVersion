@@ -1,6 +1,6 @@
 ﻿using LibGit2Sharp;
 
-namespace GitHubFlowVersion
+namespace GitVersion
 {
     public class VersionTaggedCommit
     {
