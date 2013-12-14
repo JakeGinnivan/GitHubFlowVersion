@@ -28,47 +28,49 @@ namespace GitHubFlowVersion
                 return 0;
             }
 
-            var context = CreateContext(arguments);
+            var log = new Log();
+            var gitHelper = new GitHelper(log);
+            var context = CreateContext(arguments, log, gitHelper);
 
             try
             {
-                Run(context);
+                Run(context, gitHelper, log);
                 using (var assemblyInfoUpdate = new AssemblyInfoUpdate(new FileSystem(), context))
                 {
-                    var execRun = RunExecCommandIfNeeded(context);
-                    var msbuildRun = RunMsBuildIfNeeded(context);
+                    var execRun = RunExecCommandIfNeeded(context, log);
+                    var msbuildRun = RunMsBuildIfNeeded(context, log);
                     if (!(execRun || msbuildRun))
                     {
                         assemblyInfoUpdate.DoNotRestoreAssemblyInfo();
                         if (!context.CurrentBuildServer.IsRunningInBuildAgent())
                         {
-                            Console.WriteLine("WARNING: Not running in build server and /ProjectFile or /Exec arguments not passed");
-                            Console.WriteLine();
-                            Console.WriteLine("Run GitHubFlowVersion.exe /? for help");
+                            log.WriteLine("WARNING: Not running in build server and /ProjectFile or /Exec arguments not passed");
+                            log.WriteLine();
+                            log.WriteLine("Run GitHubFlowVersion.exe /? for help");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex);
+                log.WriteErrorLine(ex.Message);
                 return 1;
             }
 
             return 0;
         }
 
-        private static GitHubFlowVersionContext CreateContext(GitHubFlowArguments arguments)
+        private static GitHubFlowVersionContext CreateContext(GitHubFlowArguments arguments, ILog log, IGitHelper gitHelper)
         {
             var context = new GitHubFlowVersionContext
             {
                 Arguments = arguments,
                 WorkingDirectory =
-                    arguments.WorkingDirectory ?? 
+                    arguments.WorkingDirectory ??
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
             };
             var fallbackStrategy = new LocalBuild();
-            var buildServers = new IBuildServer[] {new TeamCity(context)};
+            var buildServers = new IBuildServer[] { new TeamCity(log, gitHelper) };
             context.CurrentBuildServer = buildServers.FirstOrDefault(s => s.IsRunningInBuildAgent()) ?? fallbackStrategy;
 
             context.GitDirectory = GitDirFinder.TreeWalkForGitDir(context.WorkingDirectory);
@@ -85,20 +87,20 @@ namespace GitHubFlowVersion
                 throw new Exception("Failed to find .git directory.");
             }
 
-            Console.WriteLine("Git directory found at {0}", context.GitDirectory);
+            log.WriteLine("Git directory found at {0}", context.GitDirectory);
             context.RepositoryRoot = Directory.GetParent(context.GitDirectory).FullName;
 
             return context;
         }
 
-        private static bool RunMsBuildIfNeeded(GitHubFlowVersionContext context)
+        private static bool RunMsBuildIfNeeded(GitHubFlowVersionContext context, ILog log)
         {
             if (string.IsNullOrEmpty(context.Arguments.ProjectFile)) return false;
 
             var targetsArg = context.Arguments.Targets == null ? null : " /target:" + context.Arguments.Targets;
-            Console.WriteLine("Launching {0} \"{1}\"{2}", MsBuild, context.Arguments.ProjectFile, targetsArg);
+            log.WriteLine("Launching {0} \"{1}\"{2}", MsBuild, context.Arguments.ProjectFile, targetsArg);
             var results = ProcessHelper.Run(
-                Console.WriteLine, Console.Error.WriteLine,
+                log.WriteLine, log.WriteErrorLine,
                 null, MsBuild, string.Format("\"{0}\"{1}", context.Arguments.ProjectFile, targetsArg), context.RepositoryRoot);
 
             if (results != 0)
@@ -107,35 +109,36 @@ namespace GitHubFlowVersion
             return true;
         }
 
-        private static bool RunExecCommandIfNeeded(GitHubFlowVersionContext context)
+        private static bool RunExecCommandIfNeeded(GitHubFlowVersionContext context, ILog log)
         {
             if (string.IsNullOrEmpty(context.Arguments.Exec)) return false;
 
-            Console.WriteLine("Launching {0} {1}", context.Arguments.Exec, context.Arguments.ExecArgs);
+            log.WriteLine("Launching {0} {1}", context.Arguments.Exec, context.Arguments.ExecArgs);
             var results = ProcessHelper.Run(
-                Console.WriteLine, Console.Error.WriteLine,
+                log.WriteLine, Console.Error.WriteLine,
                 null, context.Arguments.Exec, context.Arguments.ExecArgs, context.RepositoryRoot);
             if (results != 0)
                 throw new Exception("MsBuild execution failed, non-zero return code");
             return true;
         }
 
-        private static void Run(GitHubFlowVersionContext context)
+        private static void Run(GitHubFlowVersionContext context, IGitHelper gitHelper, ILog log)
         {
-            var gitHelper = new GitHelper();
-            var gitRepo = new Repository(context.GitDirectory);
-            var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper, context.WorkingDirectory);
-            var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(context.RepositoryRoot),
-                lastTaggedReleaseFinder);
-            var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper,
-                gitRepo, context.CurrentBuildServer);
+            using (var gitRepo = new Repository(context.GitDirectory))
+            {
+                var lastTaggedReleaseFinder = new LastTaggedReleaseFinder(gitRepo, gitHelper, context.WorkingDirectory);
+                var nextSemverCalculator = new NextSemverCalculator(new NextVersionTxtFileFinder(context.RepositoryRoot),
+                    lastTaggedReleaseFinder);
+                var buildNumberCalculator = new BuildNumberCalculator(nextSemverCalculator, lastTaggedReleaseFinder, gitHelper,
+                    gitRepo, context.CurrentBuildServer, log);
 
-            context.NextBuildNumber = buildNumberCalculator.GetBuildNumber();
+                context.NextBuildNumber = buildNumberCalculator.GetBuildNumber();
 
-            var variableProvider = new VariableProvider();
-            context.Variables =  variableProvider.GetVariables(context.NextBuildNumber);
-            WriteResults(context);
-        }
+                var variableProvider = new VariableProvider();
+                context.Variables = variableProvider.GetVariables(context.NextBuildNumber);
+                WriteResults(context);
+            }
+         }
 
         private static void WriteResults(GitHubFlowVersionContext context)
         {

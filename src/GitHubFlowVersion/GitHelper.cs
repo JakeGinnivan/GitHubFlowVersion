@@ -6,6 +6,13 @@ namespace GitHubFlowVersion
 {
     public class GitHelper : IGitHelper
     {
+        private readonly ILog _log;
+
+        public GitHelper(ILog log)
+        {
+            _log = log;
+        }
+
         public int NumberOfCommitsOnBranchSinceCommit(Branch branch, Commit commit)
         {
             var olderThan = branch.Tip.Committer.When;
@@ -38,13 +45,13 @@ namespace GitHubFlowVersion
             {
                 if (!repository.Network.Remotes.Any())
                 {
-                    Console.WriteLine("No remotes found");
+                    _log.WriteLine("No remotes found");
                 }
                 else
                 {
                     var remote = repository.Network.Remotes.First();
 
-                    Console.WriteLine("No local branch with name {0} found, going to try on the remote {1}({2})", name, remote.Name, remote.Url);
+                    _log.WriteLine("No local branch with name {0} found, going to try on the remote {1}({2})", name, remote.Name, remote.Url);
                     try
                     {
                         repository.Network.Fetch(remote);
@@ -73,7 +80,7 @@ namespace GitHubFlowVersion
             return branch;
         }
 
-        public static void NormalizeGitRepository(IRepository repository)
+        public void NormalizeGitRepository(IRepository repository)
         {
             EnsureOnlyOneRemoteIsDefined(repository);
             CreateMissingLocalBranchesFromRemoteTrackingOnes(repository);
@@ -99,7 +106,7 @@ namespace GitHubFlowVersion
             throw new Exception(message);
         }
 
-        static void CreateMissingLocalBranchesFromRemoteTrackingOnes(IRepository repo)
+        void CreateMissingLocalBranchesFromRemoteTrackingOnes(IRepository repo)
         {
             var remoteName = repo.Network.Remotes.Single().Name;
             var prefix = string.Format("refs/remotes/{0}/", remoteName);
@@ -109,10 +116,10 @@ namespace GitHubFlowVersion
                 var localCanonicalName = "refs/heads/" + remoteTrackingReference.CanonicalName.Substring(prefix.Length);
                 if (repo.Refs.Any(x => x.CanonicalName == localCanonicalName))
                 {
-                    Console.WriteLine("Skipping local branch creation since it already exists '{0}'.", remoteTrackingReference.CanonicalName);
+                    _log.WriteLine("Skipping local branch creation since it already exists '{0}'.", remoteTrackingReference.CanonicalName);
                     continue;
                 }
-                Console.WriteLine("Creating local branch from remote tracking '{0}'.", remoteTrackingReference.CanonicalName);
+                _log.WriteLine("Creating local branch from remote tracking '{0}'.", remoteTrackingReference.CanonicalName);
 
                 var symbolicReference = remoteTrackingReference as SymbolicReference;
                 var targetId = symbolicReference == null
@@ -122,7 +129,7 @@ namespace GitHubFlowVersion
             }
         }
 
-        static void CreateFakeBranchPointingAtThePullRequestTip(IRepository repo)
+        void CreateFakeBranchPointingAtThePullRequestTip(IRepository repo)
         {
             var remote = repo.Network.Remotes.Single();
             var remoteTips = repo.Network.ListReferences(remote);
@@ -156,7 +163,7 @@ namespace GitHubFlowVersion
                 .Replace("refs/pull-requests/", "refs/heads/pull-requests/");
             repo.Refs.Add(fakeBranchName, new ObjectId(headTipSha));
 
-            Console.WriteLine("Checking out {0}", fakeBranchName);
+            _log.WriteLine("Checking out {0}", fakeBranchName);
             repo.Checkout(fakeBranchName);
         }
     }

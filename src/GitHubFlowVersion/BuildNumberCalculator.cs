@@ -1,5 +1,4 @@
-﻿using System;
-using GitHubFlowVersion.BuildServers;
+﻿using GitHubFlowVersion.BuildServers;
 using LibGit2Sharp;
 
 namespace GitHubFlowVersion
@@ -11,18 +10,20 @@ namespace GitHubFlowVersion
         private readonly IGitHelper _gitHelper;
         private readonly IRepository _gitRepo;
         private readonly IBuildServer _buildServer;
+        private readonly ILog _log;
 
         public BuildNumberCalculator(
             INextSemverCalculator nextSemverCalculator,
             ILastTaggedReleaseFinder lastTaggedReleaseFinder,
             IGitHelper gitHelper, IRepository gitRepo, 
-            IBuildServer buildServer)
+            IBuildServer buildServer, ILog log)
         {
             _nextSemverCalculator = nextSemverCalculator;
             _lastTaggedReleaseFinder = lastTaggedReleaseFinder;
             _gitHelper = gitHelper;
             _gitRepo = gitRepo;
             _buildServer = buildServer;
+            _log = log;
         }
 
         public SemanticVersion GetBuildNumber()
@@ -35,7 +36,7 @@ namespace GitHubFlowVersion
                 semanticVersion = semanticVersion.WithSuffix("PullRequest" + _buildServer.CurrentPullRequestNo(_gitRepo.Head));
             }
             var withBuildMetaData = semanticVersion.WithBuildMetaData(commitsSinceLastRelease);
-            Console.WriteLine("Version number is '{0}'", withBuildMetaData);
+            _log.WriteLine("Version number is '{0}'", withBuildMetaData);
             return withBuildMetaData;
         }
     }

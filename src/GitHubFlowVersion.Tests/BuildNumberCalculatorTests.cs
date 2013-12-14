@@ -20,7 +20,8 @@ namespace GitHubFlowVersion.Tests
             _lastTaggedReleaseFinder = Substitute.For<ILastTaggedReleaseFinder>();
             _gitHelper = Substitute.For<IGitHelper>();
             _buildServer = Substitute.For<IBuildServer>();
-            _sut = new BuildNumberCalculator(_nextSemver, _lastTaggedReleaseFinder, _gitHelper, gitRepo, _buildServer);
+            var log = Substitute.For<ILog>();
+            _sut = new BuildNumberCalculator(_nextSemver, _lastTaggedReleaseFinder, _gitHelper, gitRepo, _buildServer, log);
         }
 
         [Fact]

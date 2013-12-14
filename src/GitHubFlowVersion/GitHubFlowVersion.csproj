@@ -57,6 +57,8 @@
     <Compile Include="FileSystem.cs" />
     <Compile Include="GitHubFlowVersionContext.cs" />
     <Compile Include="IFileSystem.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="GitHubFlowArguments.cs" />
     <Compile Include="IVariableProvider.cs" />
