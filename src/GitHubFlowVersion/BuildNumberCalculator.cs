@@ -31,7 +31,7 @@ namespace GitHubFlowVersion
             SemanticVersion semanticVersion = _nextSemverCalculator.NextVersion();
             if (_buildServer.IsBuildingAPullRequest(_gitRepo))
             {
-                _gitHelper.EnsurePullBranchShareACommonAncestorWithDevelop(_gitRepo, _gitRepo.Head);
+                _gitHelper.EnsurePullBranchShareACommonAncestorWithMaster(_gitRepo, _gitRepo.Head);
                 semanticVersion = semanticVersion.WithSuffix("PullRequest" + _buildServer.CurrentPullRequestNo(_gitRepo.Head));
             }
             var withBuildMetaData = semanticVersion.WithBuildMetaData(commitsSinceLastRelease);

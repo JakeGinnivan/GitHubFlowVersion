@@ -14,7 +14,7 @@ namespace GitHubFlowVersion
                 .Count();
         }
 
-        public void EnsurePullBranchShareACommonAncestorWithDevelop(IRepository repository, Branch pullBranch)
+        public void EnsurePullBranchShareACommonAncestorWithMaster(IRepository repository, Branch pullBranch)
         {
             var ancestor = repository.Commits.FindCommonAncestor(
                 GetBranch(repository, "master").Tip, pullBranch.Tip);
