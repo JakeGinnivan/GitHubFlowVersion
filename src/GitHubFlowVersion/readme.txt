@@ -6,6 +6,10 @@ So you want to be easily able to do SemVer with your project, this project is de
 The idea is you tag releases, then the subsiquent builds have the patch version increased by 1. 
 If you want to bump the major or minor, simply update NextVersion.txt (created in the repository root) and it will be used as the base SemVer.
 
+NextVersion.txt is required to allow continuous delivery (with GitHubFlowVersion you don't need to rebuild to increase version)
+
+Commits that make breaking changes should bump major/minor using NextVersion.txt appropriately
+
 Usage
 -----
 
