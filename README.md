@@ -48,7 +48,7 @@ We will only update the version in attributes which exist, so if you want us to 
 If you ran *GitHubFlowVersion* with the /Exec or the /ProjectFile parameters we will automatically revert the changes we made to your AssemblyInfo.cs files after we have run your build.
 
 ### How is this different to just using Versions.txt
-It isn't that different, except it adds the following which makes the process work for Continuous Deliver and also generally reduces friction
+It isn't that different, except it adds the following which makes the process work for Continuous Delivery and also generally reduces friction
 
  - After a release is tagged, the patch will be bumped automatically
  - Pull requests are labeled as -PullRequestXX, meaning they have a lower semantic version than `master`
@@ -57,7 +57,7 @@ It isn't that different, except it adds the following which makes the process wo
 
 Conceptually it is also different, we are saying the next version to be released is #.#.#. Then all non-master builds are automatically pre-release making their version lower than master.
 
-Read more at [How GitHubVersion works](https://github.com/JakeGinnivan/GitHubFlowVersion/wiki/How-it-works)
+Read more at [How GitHubFlowVersion works](https://github.com/JakeGinnivan/GitHubFlowVersion/wiki/How-it-works)
 
 ### What is the difference between [GitFlowVersion](https://github.com/Particular/GitFlowVersion) and this?
 This project is based on the idea's of GitFlowVersion except it is designed to work with `GitHub Flow` rather than `GitFlow` which is a much more complicated branching strategy
