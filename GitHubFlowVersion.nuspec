@@ -11,13 +11,17 @@
     <description>The easy way to use semantic versioning (semver.org) with GitHub Flow</description>
     <releaseNotes>
 # 1.2.0
-Added /UpdateAssemblyInfo flag to update AssemblyInfo.cs files
+ - Added /UpdateAssemblyInfo flag to update AssemblyInfo.cs files
+# 1.3.0
+- Can now use relative paths to the git repo root for project files
+- Pull Requests are now detected without adding teamcity env variables
 </releaseNotes>
     <copyright>Copyright Jake Ginnivan 2013</copyright>
     <tags>GitHubFlow Versioning SemVer SemanticVersioning Continuous Integration Delivery</tags>
   </metadata>
   <files>
     <file src="ToBeRemoved.txt" target="content"/>
+    <file src="Readme.txt" target=""/>
     <file src="GitHubFlowVersion.exe" target="tools"/>
     <file src="GitHubFlowVersion.pdb" target="tools"/>
     <file src="install.ps1" target="tools"/>
