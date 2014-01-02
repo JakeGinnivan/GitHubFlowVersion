@@ -27,7 +27,7 @@
     <file src="install.ps1" target="tools"/>
     <file src="Args.dll" target="tools"/>
     <file src="LibGit2Sharp.dll" target="tools"/>
-    <file src="NativeBinaries/amd64/*.dll" target="tools/NativeBinaries/amd64/"/>
-    <file src="NativeBinaries/x86/*.dll" target="tools/NativeBinaries/x86/"/>
+    <file src="NativeBinaries\amd64\*.dll" target="tools\NativeBinaries\amd64"/>
+    <file src="NativeBinaries\x86\*.dll" target="tools\NativeBinaries\x86"/>
   </files>
 </package>
