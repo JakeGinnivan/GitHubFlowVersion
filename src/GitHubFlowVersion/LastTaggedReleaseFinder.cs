@@ -40,7 +40,7 @@ namespace GitHubFlowVersion
                 branch.Commits.FirstOrDefault(c => c.Committer.When <= olderThan && tags.Any(a => a.Commit == c));
 
             if (lastTaggedCommit != null)
-                return tags.Single(a => a.Commit.Sha == lastTaggedCommit.Sha);
+                return tags.Last(a => a.Commit.Sha == lastTaggedCommit.Sha);
 
             // Create a next version txt as 0.1.0
             var filePath = Path.Combine(_workingDirectory, "NextVersion.txt");
