@@ -77,13 +77,14 @@ namespace GitHubFlowVersion
         {
             EnsureOnlyOneRemoteIsDefined(repository);
             CreateMissingLocalBranchesFromRemoteTrackingOnes(repository);
+            
+            if(CheckIfHeadIsAPullRequest(repository))
+                CreateFakeBranchPointingAtThePullRequestTip(repository);
+        }
 
-            if (!repository.Info.IsHeadDetached)
-            {
-                return;
-            }
-
-            CreateFakeBranchPointingAtThePullRequestTip(repository);
+        static bool CheckIfHeadIsAPullRequest(IRepository repository)
+        {
+            return repository.Info.IsHeadDetached && repository.Tags.All(t => t.Target != repository.Head.Tip);
         }
 
         static void EnsureOnlyOneRemoteIsDefined(IRepository repo)
