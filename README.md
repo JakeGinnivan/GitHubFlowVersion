@@ -1,6 +1,10 @@
-GitHubFlowVersion
-=================
+## GitHubFlowVersion has been replaced by GitVersion
 
-This project is winding down and will be fully replaced by [GitVersion](https://github.com/Particular/GitVersion) in the very near future.
+GitVersion has the following features over GitHubFlowVersion:
 
-I have migrated the features of GitHubFlowVersion over to GitVersion and it should be a direct replacement. If there is anything missing, please raise an issue with GitVersion and we will fix it!
+ - Supports both GitHubFlow and GitFlow
+ - Many more ways to consume it (Ruby Gem, MSBuild task, Library etc)
+
+The functionality of this project has been ported into [https://github.com/Particular/GitVersion](https://github.com/Particular/GitVersion)
+
+Migration to GitVersion should be very straight forward, if you have any problems raise an issue at [https://github.com/Particular/GitVersion/issues](https://github.com/Particular/GitVersion/issues)
